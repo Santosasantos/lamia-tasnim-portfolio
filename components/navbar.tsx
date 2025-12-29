@@ -107,7 +107,7 @@ export function Navbar() {
             onClick={handleLogoClick}
             className={`text-base sm:text-lg lg:text-xl font-bold transition-colors whitespace-nowrap ${isScrolled ? "text-white" : "text-primary"}`}
           >
-            MD AMIR
+            Rifat Ahmed
           </Link>
 
           {/* Desktop Navigation */}

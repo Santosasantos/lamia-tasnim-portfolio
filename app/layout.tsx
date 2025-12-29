@@ -8,11 +8,11 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" })
 
 export const metadata: Metadata = {
-  title: "MD. Amir Hossen | Economist & Researcher",
+  title: "Rifat Ahmed | Software Engineer & Research Enthusiast",
   description:
-    "Portfolio of MD. Amir Hossen - Prospective Graduate Student, Aspiring Economist & Researcher specializing in development economics, applied microeconomics, and labor economics.",
-  keywords: ["Economist", "Researcher", "Economics", "Portfolio", "Graduate Student", "Academic", "Publications"],
-  authors: [{ name: "MD. Amir Hossen" }],
+    "Portfolio of Rifat Ahmed - Software Engineer & Research Enthusiast specializing in full-stack development, machine learning, AI applications in healthcare, and fintech solutions for emerging markets.",
+  keywords: ["Software Engineer", "Full Stack Developer", "Machine Learning", "AI", "Research", "Portfolio", "Bangladesh", "Tech"],
+  authors: [{ name: "Rifat Ahmed" }],
   icons: {
     icon: "/icon",
     apple: "/icon",
