@@ -1,20 +1,19 @@
 # Bangladeshi Profile Seed Data
 
-This directory contains seed data for a random Bangladeshi person profile with comprehensive portfolio information including images, PDFs, and videos.
+This directory contains seed data for a Bangladeshi profile with comprehensive portfolio information including images, PDFs, and videos.
 
 ## 📋 Files Overview
 
 ### 1. `014_seed_bangladeshi_profile.sql`
 Main seed data file containing:
-- **Profile**: Rifat Ahmed - Software Engineer & Research Enthusiast
-- **Education**: BUET (Computer Science), Notre Dame College, Motijheel Ideal School
-- **Experiences**: 5 professional experiences including bKash, Grameenphone, BUET
-- **Publications**: 5 publications (academic, conference, non-academic)
-- **Skills**: 16 skills (Technical, Interpersonal, Languages)
-- **Awards**: 4 awards with image URLs
-- **Volunteering**: 5 volunteering activities
-- **Scholarly Activities**: 5 scholarly activities
-- **Certifications**: 7 certifications
+- **Profile**: Lamia Tasnim - Public Health Professional | Researcher | Mental Health Systems Advocate
+- **Education**: MPH (North South University), BSc in Food & Nutrition (University of Dhaka)
+- **Experiences**: Public health research + community mental health systems leadership
+- **Publications**: Selected academic + conference contributions
+- **Skills**: Public health analytics, program design, leadership, and languages
+- **Awards**: Global Youth Leadership Award (Nepal)
+- **Volunteering**: Community mental health and humanitarian engagement
+- **Scholarly Activities**: Conference presentation and systems-building activities
 
 ### 2. `015_ensure_storage_setup.sql`
 Master migration script that ensures:
@@ -78,8 +77,8 @@ After uploading, update the URLs in the database using the admin panel or SQL:
 ```sql
 -- Example: Update profile image
 UPDATE profiles 
-SET profile_image = 'https://your-supabase-url.supabase.co/storage/v1/object/public/profile-images/rifat-ahmed.jpg'
-WHERE full_name = 'Rifat Ahmed';
+SET profile_image = 'https://your-supabase-url.supabase.co/storage/v1/object/public/profile-images/lamia-tasnim.jpg'
+WHERE full_name = 'Lamia Tasnim';
 
 -- Example: Update award image
 UPDATE awards 
@@ -98,44 +97,36 @@ WHERE title = 'Best Paper Award';
 
 ### Tables Populated:
 - `profiles` - 1 record
-- `education` - 3 records
-- `experiences` - 5 records
-- `publications` - 5 records
-- `skills` - 16 records
-- `awards` - 4 records
-- `volunteering` - 5 records
-- `scholarly_activities` - 5 records
-- `certifications` - 7 records
+- `education` - 2 records
+- `experiences` - 4 records
+- `publications` - 2 records
+- `skills` - 17 records
+- `awards` - 1 record
+- `volunteering` - 4 records
+- `scholarly_activities` - 3 records
+- `certifications` - 0 records
 
 ## 📊 Seed Data Details
 
 ### Profile Information
-- **Name**: Rifat Ahmed
-- **Title**: Software Engineer & Research Enthusiast | Full Stack Developer
-- **Email**: rifat.ahmed.bd@gmail.com
-- **Phone**: +880 1712-345678
-- **Address**: House 45, Road 12, Dhanmondi, Dhaka-1209, Bangladesh
-- **LinkedIn**: https://linkedin.com/in/rifat-ahmed-bd
-- **GitHub**: https://github.com/rifat-ahmed-bd
+- **Name**: Lamia Tasnim
+- **Title**: Public Health Professional | Researcher | Mental Health Systems Advocate (Bangladesh)
+- **Email**: contact@lamia-tasnim.org *(update as needed)*
+- **Address**: Dhaka, Bangladesh
 
 ### Education
-1. **BUET** - BSc in CSE (2019-2023) - CGPA: 3.85/4.00
-2. **Notre Dame College** - HSC (2016-2018) - GPA: 5.00/5.00
-3. **Motijheel Ideal School** - SSC (2014-2016) - GPA: 5.00/5.00
+1. **North South University** - Master of Public Health (MPH) - CGPA: 3.25
+2. **University of Dhaka** - BSc in Food & Nutrition - CGPA: 3.38
 
 ### Key Experiences
-1. **Senior Software Engineer** at bKash Limited (2024-Present)
-2. **Research Assistant** at University of Dhaka (2023)
-3. **Full Stack Developer Intern** at Grameenphone (2023)
-4. **Teaching Assistant** at BUET (2022-2023)
-5. **Freelance Web Developer** (2021-Present)
+1. **Leadership & Program Development (Mental Health Systems)** at Let’s Talk Mental Health (LTMH)
+2. **Founder & Lead** at BrainWaves (Teacher Training Initiative)
+3. **Public Health Researcher** (Public health, mental health, and digital health)
+4. **Humanitarian & Crisis Response** (psychosocial support-informed engagement)
 
 ### Publications
-1. AI-Powered Disease Prediction System (Conference - Published)
-2. Fintech Solutions for Financial Inclusion (Academic - Published)
-3. Sustainable Software Development (Non-Academic - Published)
-4. Machine Learning in Agriculture (Conference - Published)
-5. Blockchain-Based Supply Chain (Academic - Under Review)
+1. Hyper-Tuned Vision Transformer + Explainable AI for Eye Disease Detection (ICTBJ-2023)
+2. Federated Learning in Healthcare: Security, Ethics, and Future Directions (Systematic Review)
 
 ## 🔧 Troubleshooting
 

@@ -2,17 +2,32 @@
 
 import { Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/hooks/use-toast"
 
 export function DownloadCVButton() {
-  const handleDownloadCV = () => {
-    const link = document.createElement("a")
-    link.href = "/MD_AMIR_HOSSEN_CV.pdf"
-    // link.download = "MD_AMIR_HOSSEN_CV.pdf"
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.open("/MD_AMIR_HOSSEN_CV.pdf", "_blank")
-  }; 
+  const { toast } = useToast()
+
+  const handleDownloadCV = async () => {
+    const preferredUrl = "/Lamia_Tasnim_CV.pdf"
+
+    try {
+      const res = await fetch(preferredUrl, { method: "HEAD" })
+      if (!res.ok) {
+        toast({
+          title: "CV not found",
+          description: `Please add the CV file to public as ${preferredUrl}.`,
+        })
+        return
+      }
+
+      window.open(preferredUrl, "_blank")
+    } catch {
+      toast({
+        title: "Unable to download CV",
+        description: `Please add the CV file to public as ${preferredUrl}.`,
+      })
+    }
+  }
 
   return (
     <Button

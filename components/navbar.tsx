@@ -6,6 +6,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { createClient } from "@/lib/supabase/client"
 
 const navItems = [
   { name: "Home", href: "/", scrollTo: "home" },
@@ -13,6 +14,7 @@ const navItems = [
   { name: "Scholarly Activities", href: "/scholarly-activities", scrollTo: "scholarly-activities" },
   { name: "Publications", href: "/publications", scrollTo: "publications" },
   { name: "Honors & Awards", href: "/awards", scrollTo: "awards" },
+  { name: "Media Coverage", href: "/#media-coverage", scrollTo: "media-coverage" },
   { name: "Skills & Courses", href: "/skills", scrollTo: "skills" },
   { name: "Volunteering", href: "/volunteering", scrollTo: "volunteering" },
   { name: "Blogs", href: "/blogs", scrollTo: "blogs" },
@@ -24,6 +26,7 @@ export function Navbar() {
   const router = useRouter()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [portfolioName, setPortfolioName] = useState("Lamia Tasnim")
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +35,27 @@ export function Navbar() {
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    let isMounted = true
+    const supabase = createClient()
+
+    supabase
+      .from("profiles")
+      .select("full_name")
+      .single()
+      .then(({ data }: { data: { full_name: string } | null }) => {
+        if (!isMounted) return
+        if (data?.full_name) setPortfolioName(data.full_name)
+      })
+      .catch(() => {
+        // Keep fallback name if profile fetch fails
+      })
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   useEffect(() => {
@@ -55,13 +79,21 @@ export function Navbar() {
     // Close mobile menu immediately
     setIsMobileMenuOpen(false)
 
+    const [hrefPath, hrefHash] = href.split("#")
+    const isSamePage = pathname === hrefPath
+
     // If clicking on current page's link, scroll to top or section
-    if (pathname === href) {
+    if (isSamePage) {
       e.preventDefault()
-      if (href === "/" && scrollTo === "home") {
+      if (hrefPath === "/" && scrollTo === "home") {
         window.scrollTo({ top: 0, behavior: "smooth" })
       } else if (scrollTo) {
         const element = document.getElementById(scrollTo)
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" })
+        }
+      } else if (hrefHash) {
+        const element = document.getElementById(hrefHash)
         if (element) {
           element.scrollIntoView({ behavior: "smooth", block: "start" })
         }
@@ -107,7 +139,7 @@ export function Navbar() {
             onClick={handleLogoClick}
             className={`text-base sm:text-lg lg:text-xl font-bold transition-colors whitespace-nowrap ${isScrolled ? "text-white" : "text-primary"}`}
           >
-            Rifat Ahmed
+            {portfolioName}
           </Link>
 
           {/* Desktop Navigation */}

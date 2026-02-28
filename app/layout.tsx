@@ -8,11 +8,22 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" })
 
 export const metadata: Metadata = {
-  title: "Rifat Ahmed | Software Engineer & Research Enthusiast",
+  title: "Lamia Tasnim | Public Health Professional & Mental Health Systems Advocate",
   description:
-    "Portfolio of Rifat Ahmed - Software Engineer & Research Enthusiast specializing in full-stack development, machine learning, AI applications in healthcare, and fintech solutions for emerging markets.",
-  keywords: ["Software Engineer", "Full Stack Developer", "Machine Learning", "AI", "Research", "Portfolio", "Bangladesh", "Tech"],
-  authors: [{ name: "Rifat Ahmed" }],
+    "Portfolio of Lamia Tasnim — Bangladeshi public health professional, researcher, and mental health systems advocate working across research, responsible AI in healthcare, and community mental health programming.",
+  keywords: [
+    "Public Health",
+    "Mental Health",
+    "Mental Health Systems",
+    "Global Mental Health",
+    "Health Equity",
+    "Digital Health",
+    "AI in Healthcare",
+    "Research",
+    "Bangladesh",
+    "Portfolio",
+  ],
+  authors: [{ name: "Lamia Tasnim" }],
   icons: {
     icon: "/icon",
     apple: "/icon",

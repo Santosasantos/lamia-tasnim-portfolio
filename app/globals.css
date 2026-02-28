@@ -11,11 +11,14 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
 
-  /* Updated primary color to match professional economist portfolio #036445 */
+  /* Primary: Bangladesh-inspired green for delegate/prestige portfolio */
   --primary: #036445;
   --primary-foreground: oklch(1 0 0);
   --primary-light: #e8f5f1;
   --primary-dark: #024b34;
+  /* Bangladesh flag accents (use sparingly) */
+  --bd-green: #006a4e;
+  --bd-red: #f42a41;
 
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);

@@ -6,93 +6,56 @@
 -- PROFILE IMAGE
 -- ============================================
 -- Update profile image URL
--- IMPORTANT: Upload a realistic photo of a Bangladeshi male professional first
+-- IMPORTANT: Upload the profile photo first
 -- See scripts/018_ADD_PROFILE_IMAGE.md for detailed instructions
--- Replace 'rifat-ahmed-profile.jpg' with your actual file name
+-- Replace 'lamia-tasnim-profile.jpg' with your actual file name
 UPDATE profiles 
-SET profile_image = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/profile-images/rifat-ahmed-profile.jpg'
-WHERE full_name = 'Rifat Ahmed';
+SET profile_image = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/profile-images/lamia-tasnim-profile.jpg'
+WHERE full_name = 'Lamia Tasnim';
 
 -- ============================================
 -- AWARD IMAGES
 -- ============================================
--- Update Best Paper Award image
 UPDATE awards 
-SET image = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/award-images/best-paper-award.jpg'
-WHERE title = 'Best Paper Award';
-
--- Update BUET Programming Contest Champion image
-UPDATE awards 
-SET image = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/award-images/buet-programming-champion.jpg'
-WHERE title = 'Champion' AND issuer = 'BUET Programming Contest 2022';
-
--- Update Dean's List image
-UPDATE awards 
-SET image = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/award-images/deans-list.jpg'
-WHERE title = 'Dean''s List';
-
--- Update Outstanding Intern Award image
-UPDATE awards 
-SET image = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/award-images/outstanding-intern.jpg'
-WHERE title = 'Outstanding Intern Award';
+SET image = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/award-images/global-youth-leadership-award.jpg'
+WHERE title = 'Global Youth Leadership Award';
 
 -- ============================================
 -- CONFERENCE IMAGES
 -- ============================================
--- Update IEEE Healthcare Conference images
-UPDATE publications 
-SET conference_images = ARRAY[
-  'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-images/ieee-healthcare-1.jpg',
-  'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-images/ieee-healthcare-2.jpg',
-  'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-images/ieee-healthcare-3.jpg'
-]
-WHERE title LIKE '%AI-Powered Disease Prediction%';
-
--- Update AI Agriculture Conference images
-UPDATE publications 
-SET conference_images = ARRAY[
-  'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-images/ai-agriculture-1.jpg',
-  'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-images/ai-agriculture-2.jpg'
-]
-WHERE title LIKE '%Machine Learning Applications in Agriculture%';
+-- Example: Update ICTBJ-2023 conference presentation images (optional)
+-- UPDATE publications 
+-- SET conference_images = ARRAY[
+--   'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-images/ictbj-2023-1.jpg',
+--   'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-images/ictbj-2023-2.jpg'
+-- ]
+-- WHERE title LIKE '%Vision Transformer%';
 
 -- ============================================
 -- CONFERENCE PDFS
 -- ============================================
--- Update IEEE Healthcare Conference paper PDF
-UPDATE publications 
-SET conference_paper_pdf = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-pdfs/ai-healthcare-bangladesh.pdf'
-WHERE title LIKE '%AI-Powered Disease Prediction%';
-
--- Update AI Agriculture Conference paper PDF
-UPDATE publications 
-SET conference_paper_pdf = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-pdfs/ml-agriculture.pdf'
-WHERE title LIKE '%Machine Learning Applications in Agriculture%';
+-- Example: Update ICTBJ-2023 paper PDF (optional)
+-- UPDATE publications 
+-- SET conference_paper_pdf = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-pdfs/ictbj-2023-paper.pdf'
+-- WHERE title LIKE '%Vision Transformer%';
 
 -- ============================================
 -- ACADEMIC PDFS
 -- ============================================
--- Update Fintech Solutions PDF
-UPDATE publications 
-SET academic_pdf = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/academic-pdfs/fintech-bangladesh.pdf'
-WHERE title LIKE '%Fintech Solutions for Financial Inclusion%';
+-- Example: Update academic PDF for systematic review (optional)
+-- UPDATE publications 
+-- SET academic_pdf = 'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/academic-pdfs/federated-learning-healthcare-review.pdf'
+-- WHERE title LIKE '%Federated Learning in Healthcare%';
 
 -- ============================================
 -- CONFERENCE VIDEOS
 -- ============================================
--- Update IEEE Healthcare Conference video
-UPDATE publications 
-SET conference_videos = ARRAY[
-  'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-videos/ai-healthcare-presentation.mp4'
-]
-WHERE title LIKE '%AI-Powered Disease Prediction%';
-
--- Update AI Agriculture Conference video
-UPDATE publications 
-SET conference_videos = ARRAY[
-  'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-videos/ml-agriculture-presentation.mp4'
-]
-WHERE title LIKE '%Machine Learning Applications in Agriculture%';
+-- Example: Update conference presentation video (optional)
+-- UPDATE publications 
+-- SET conference_videos = ARRAY[
+--   'https://YOUR_SUPABASE_URL.supabase.co/storage/v1/object/public/conference-videos/ictbj-2023-presentation.mp4'
+-- ]
+-- WHERE title LIKE '%Vision Transformer%';
 
 -- ============================================
 -- VERIFICATION QUERIES

@@ -18,7 +18,7 @@ export default async function ContactPage() {
 
       <PageHero
         title="CONTACT"
-        subtitle="I welcome opportunities for collaboration, academic discussions, and professional networking. Feel free to reach out for research inquiries, speaking opportunities, or academic consultation."
+        subtitle="I welcome opportunities for collaboration, research partnerships, speaking engagements, and program design support across public health, mental health systems, and responsible digital health innovation."
         backgroundType="contact"
       />
 
@@ -36,7 +36,7 @@ export default async function ContactPage() {
                       <div>
                         <p className="font-medium">Address</p>
                         <p className="text-sm text-muted-foreground">
-                          {profile?.address || "Chittagong University, Hathazari- 4331, Chittagong, Bangladesh"}
+                          {profile?.address || "Dhaka, Bangladesh"}
                         </p>
                       </div>
                     </div>
@@ -60,13 +60,12 @@ export default async function ContactPage() {
 
               <Card className="mt-4 bg-primary/5">
                 <CardContent className="p-5">
-                  <h3 className="font-bold text-primary mb-3">Research Collaboration</h3>
+                  <h3 className="font-bold text-primary mb-3">Collaboration & Engagement</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    I am open to research collaboration opportunities and welcome engagement in interdisciplinary
-                    projects that drive innovation and meaningful impact. I would be glad to connect with researchers,
-                    academics, and institutions interested in potential partnerships. Please feel free to reach out if
-                    you are exploring avenues for collaboration or have funding opportunities for joint research
-                    initiatives.
+                    I am open to research and implementation partnerships that strengthen public health and mental
+                    health systems—especially work that translates evidence into ethical, scalable, community-level
+                    programs. Please reach out for collaboration, advisory support, training facilitation, or speaking
+                    opportunities aligned with health equity, responsible digital health, and community mental health.
                   </p>
                 </CardContent>
               </Card>
@@ -105,9 +104,9 @@ export default async function ContactPage() {
           <div className="mt-8">
             <h2 className="text-2xl font-bold text-primary mb-4 text-center">Find Me Here</h2>
             <MapLocation
-              latitude={22.471039}
-              longitude={91.788467}
-              locationName="University of Chittagong, Bangladesh"
+              latitude={23.8103}
+              longitude={90.4125}
+              locationName={profile?.address || "Dhaka, Bangladesh"}
             />
           </div>
         </div>
