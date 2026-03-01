@@ -133,17 +133,17 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="flex h-14 sm:h-16 items-center justify-between">
+        <div className="flex h-14 sm:h-16 items-center justify-between gap-4">
           <Link
             href="/"
             onClick={handleLogoClick}
-            className={`text-base sm:text-lg lg:text-xl font-bold transition-colors whitespace-nowrap ${isScrolled ? "text-white" : "text-primary"}`}
+            className={`text-base sm:text-lg lg:text-xl font-bold transition-colors whitespace-nowrap flex-shrink-0 ${isScrolled ? "text-white" : "text-primary"}`}
           >
             {portfolioName}
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-1 flex-shrink-0">
             {navItems.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -151,7 +151,7 @@ export function Navbar() {
                   key={item.href}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.scrollTo, item.href)}
-                  className={`px-3 py-2 text-sm font-medium transition-colors rounded whitespace-nowrap ${
+                  className={`px-2.5 py-2 text-xs xl:text-sm font-medium transition-colors rounded whitespace-nowrap ${
                     isScrolled
                       ? isActive
                         ? "bg-white/20 text-white"

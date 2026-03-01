@@ -83,6 +83,11 @@ export default async function Home() {
     .from("scholarly_activities")
     .select("*")
     .order("display_order", { ascending: true })
+  const { data: mediaCoverage } = await supabase
+    .from("media_coverage")
+    .select("*")
+    .eq("is_featured", true)
+    .order("display_order", { ascending: true })
 
   const researchExperiences = experiences?.filter((exp: any) => exp.category === "Research") || []
   const industryExperiences = experiences?.filter((exp: any) => exp.category === "Industry") || []
@@ -111,75 +116,112 @@ export default async function Home() {
       <main className="overflow-x-hidden">
         <section
           id="home"
-          className="relative overflow-hidden bg-gradient-to-br from-primary-light/40 via-white to-primary-light/20 py-16 sm:py-20 md:py-24 lg:py-14 px-4 sm:px-6 lg:px-8"
+          className="relative overflow-hidden bg-gradient-to-br from-primary-light/30 via-white to-primary-light/20 py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8"
         >
-          {/* Subtle Bangladesh-inspired accent */}
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 20% 80%, #006a4e 1px, transparent 1px), radial-gradient(circle at 80% 20%, #006a4e 1px, transparent 1px)", backgroundSize: "48px 48px" }} aria-hidden />
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" aria-hidden />
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" aria-hidden />
+          {/* Elegant Bangladesh-inspired pattern */}
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 20% 80%, #006a4e 1px, transparent 1px), radial-gradient(circle at 80% 20%, #006a4e 1px, transparent 1px)", backgroundSize: "60px 60px" }} aria-hidden />
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" aria-hidden />
+          
+          {/* Subtle decorative elements */}
+          <div className="absolute top-20 right-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" aria-hidden />
+          <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#f42a41]/5 rounded-full blur-3xl" aria-hidden />
 
           <div className="relative mx-auto max-w-7xl">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-14 lg:gap-16 items-center">
-              <div className="order-2 lg:order-1 space-y-5 sm:space-y-6 text-center lg:text-left animate-slide-from-left">
-                {/* Badge: Key Representative · Bangladesh */}
-                <div className="inline-flex items-center gap-2 rounded-full border-2 border-primary/40 bg-white/80 px-4 py-2 text-sm font-semibold text-primary shadow-sm backdrop-blur-sm">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#f42a41] animate-pulse" aria-hidden />
-                  Key Representative · Bangladesh
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-14 items-center">
+              <div className="order-2 lg:order-1 space-y-4 sm:space-y-5 text-center lg:text-left animate-slide-from-left">
+                {/* Premium Badge: Key Representative */}
+                <div className="inline-flex items-center gap-2.5 rounded-full border-2 border-primary/50 bg-white/90 px-5 py-2.5 text-sm font-bold text-primary shadow-lg backdrop-blur-md hover:shadow-xl transition-all duration-300">
+                  <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#f42a41] animate-pulse shadow-sm" aria-hidden />
+                  <span className="tracking-wide">{profile?.hero_badge_text || "Key Representative · Bangladesh"}</span>
                 </div>
-                <div>
-                  <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-primary/70 mb-3 font-medium">
-                    Representing Bangladesh in Global Mental Health & Public Health
+                
+                <div className="space-y-3">
+                  <p className="text-xs sm:text-sm uppercase tracking-[0.25em] text-primary/80 font-bold">
+                    {profile?.hero_subtitle || "Representing Bangladesh in Global Mental Health & Public Health"}
                   </p>
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary mb-4 sm:mb-5 leading-[1.1] tracking-tight">
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary leading-[0.95] tracking-tight">
                     {profile?.full_name || "Lamia Tasnim"}
                   </h1>
-                  <p className="text-lg sm:text-xl md:text-2xl text-foreground/90 mb-5 sm:mb-6 font-medium leading-snug">
+                  <div className="w-20 h-1.5 bg-gradient-to-r from-primary via-[#f42a41] to-primary rounded-full mx-auto lg:mx-0" aria-hidden />
+                  <p className="text-lg sm:text-xl md:text-2xl text-foreground/90 font-semibold leading-tight pt-2">
                     {profile?.title || "Public Health Professional | Researcher | Mental Health Systems Advocate"}
-                  </p>
-                  <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                    {profile?.bio ||
-                      "Bangladeshi public health professional and mental health advocate with over a decade of experience. Her work connects research, AI in healthcare, and community programs—strengthening systems and representing Bangladesh in global mental health discussions, guided by ethics and sustainability."}
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start pt-2">
+                {/* Credentials Highlight - More Prominent */}
+                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start pt-2">
+                  {profile?.credential_1_text && (
+                    <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 hover:border-primary/40 transition-all">
+                      <Award className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="font-semibold text-foreground text-sm">{profile.credential_1_text}</span>
+                    </div>
+                  )}
+                  {profile?.credential_2_text && (
+                    <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 hover:border-primary/40 transition-all">
+                      <School className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="font-semibold text-foreground text-sm">{profile.credential_2_text}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Bio - Concise */}
+                <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed pt-1">
+                  {profile?.bio ||
+                    "Bridging research, AI in healthcare, and community mental health programs. Over a decade of experience strengthening systems and representing Bangladesh in global health discussions with ethical leadership."}
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start pt-3">
                   <ScrollButton targetId="contact">
                     <Button
                       size="lg"
-                      className="bg-primary hover:bg-primary-dark text-white w-full sm:w-auto px-8 py-3 sm:px-10 sm:py-3.5 text-base font-semibold shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30"
+                      className="bg-primary hover:bg-primary-dark text-white w-full sm:w-auto px-8 py-3 sm:px-10 sm:py-3.5 text-base font-bold shadow-xl shadow-primary/30 transition-all hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-0.5"
                     >
-                      <Mail className="h-5 w-5 mr-2" />
+                      <Mail className="h-5 w-5 mr-2.5" />
                       Get in Touch
                     </Button>
                   </ScrollButton>
                   <DownloadCVButton />
                 </div>
-                <div className="pb-20 sm:pb-16 md:pb-12"></div>
               </div>
 
               <div className="order-1 lg:order-2 flex justify-center animate-slide-from-right">
-                <div className="relative w-52 h-52 sm:w-60 sm:h-60 md:w-72 md:h-72 lg:w-[22rem] lg:h-[22rem] group">
-                  <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 blur-xl group-hover:from-primary/30 group-hover:to-primary/10 transition-all duration-500" aria-hidden />
-                  <div className="absolute inset-0 rounded-full border-4 border-white shadow-[0_0_0_3px_rgba(3,100,69,0.3)] ring-4 ring-primary/10" aria-hidden />
-                  <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-primary shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-primary/30">
+                <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-[22rem] xl:h-[22rem] group">
+                  {/* Glow effect */}
+                  <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-primary/25 via-[#f42a41]/10 to-primary/20 blur-2xl group-hover:from-primary/35 group-hover:via-[#f42a41]/15 group-hover:to-primary/30 transition-all duration-700" aria-hidden />
+                  
+                  {/* Decorative rings */}
+                  <div className="absolute inset-0 rounded-full border-4 border-white shadow-[0_0_0_4px_rgba(3,100,69,0.15)] ring-8 ring-primary/5" aria-hidden />
+                  <div className="absolute -inset-2 rounded-full border-2 border-primary/20 animate-pulse" aria-hidden />
+                  
+                  {/* Image container */}
+                  <div className="relative w-full h-full rounded-full overflow-hidden border-[6px] border-primary shadow-2xl transition-all duration-500 hover:scale-[1.03] hover:shadow-primary/40 hover:border-primary-dark">
                     <Image
                       src={profile?.profile_image || "/placeholder.svg?height=400&width=400"}
                       alt={profile?.full_name || "Profile"}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
                       priority
                     />
+                  </div>
+                  
+                  {/* Bangladesh flag accent - subtle */}
+                  <div className="absolute -bottom-2 -right-2 w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center border-4 border-primary/20">
+                    <div className="w-12 h-12 rounded-full overflow-hidden">
+                      <div className="w-full h-full bg-[#006a4e] relative">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[#f42a41]" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
             <ScrollButton targetId="education">
-              <button className="flex flex-col items-center gap-2 text-primary hover:text-primary-dark transition-colors">
-                <span className="text-sm font-medium">Scroll Down For More</span>
-                <ChevronDown className="h-6 w-6" />
+              <button className="flex flex-col items-center gap-2 text-primary hover:text-primary-dark transition-colors group">
+                <span className="text-sm font-semibold tracking-wide">Explore More</span>
+                <ChevronDown className="h-6 w-6 group-hover:translate-y-1 transition-transform" />
               </button>
             </ScrollButton>
           </div>
@@ -766,13 +808,14 @@ export default async function Home() {
                   >
                     <CardContent className="p-0">
                       {/* Award Image */}
-                      <div className="relative w-full h-56 bg-gradient-to-br from-gray-50 to-gray-100">
+                      <div className="relative w-full h-64 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
                         {award.image ? (
                           <Image
                             src={award.image}
                             alt={award.title}
                             fill
-                            className="object-contain p-4"
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           />
                         ) : (
                           <div className="flex items-center justify-center h-full">
@@ -811,93 +854,185 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Media Coverage Section - Press-room prestige, national & international recognition */}
-        <section id="media-coverage" className="relative overflow-hidden py-24 md:py-28 scroll-mt-20">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary-light/25 via-white to-primary-light/15" aria-hidden />
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" aria-hidden />
+        {/* Media Coverage Section - International prestige & national recognition */}
+        <section id="media-coverage" className="relative overflow-hidden py-28 md:py-32 scroll-mt-20">
+          {/* Premium gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-light/30 via-white to-primary-light/20" aria-hidden />
+          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 30% 70%, #006a4e 1px, transparent 1px), radial-gradient(circle at 70% 30%, #f42a41 1px, transparent 1px)", backgroundSize: "80px 80px" }} aria-hidden />
+          
+          {/* Decorative elements */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" aria-hidden />
+          <div className="absolute top-20 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" aria-hidden />
+          <div className="absolute bottom-20 left-0 w-96 h-96 bg-[#f42a41]/5 rounded-full blur-3xl" aria-hidden />
+          
           <div className="relative container mx-auto px-6 max-w-7xl">
             <div className="text-center mb-20">
-              <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-primary/70 mb-4 font-semibold">
+              {/* Premium badge */}
+              <div className="inline-flex items-center gap-2.5 rounded-full border-2 border-primary/50 bg-white/90 px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-primary/80 shadow-lg backdrop-blur-md mb-6">
+                <Award className="h-4 w-4" />
                 National & International Recognition
-              </p>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-5 tracking-tight">
+              </div>
+              
+              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 tracking-tight">
                 Media Coverage & Public Recognition
               </h2>
-              <div className="w-24 h-1 bg-primary mx-auto rounded-full mb-6" />
-              <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              <div className="w-20 h-1.5 bg-primary mx-auto rounded-full mb-6"></div>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Featured in prominent national media and recognized internationally for advancing youth-led mental health
                 reform, community health systems, and ethically grounded humanitarian engagement—representing Bangladesh
                 on the global stage.
               </p>
             </div>
 
-            <div className="max-w-6xl mx-auto space-y-8">
-              {/* International Award - Premium highlight */}
-              <Card className="overflow-hidden border-2 border-primary/30 shadow-xl shadow-primary/5 bg-gradient-to-br from-white to-primary-light/10 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500">
-                <div className="bg-primary/5 px-6 py-4 border-b border-primary/10">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-full bg-primary/15">
-                      <Award className="h-6 w-6 text-primary" />
+            <div className="max-w-6xl mx-auto space-y-10">
+              {/* International Award - Premium spotlight */}
+              <Card className="overflow-hidden border-4 border-primary/40 shadow-2xl shadow-primary/10 bg-gradient-to-br from-white via-primary-light/5 to-white hover:shadow-3xl hover:shadow-primary/15 transition-all duration-700 hover:-translate-y-1">
+                <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent px-8 py-6 border-b-2 border-primary/20">
+                  <div className="flex flex-col md:flex-row md:items-center gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-lg">
+                        <Award className="h-8 w-8 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-wider text-primary/70 mb-1">International Honor</p>
+                        <h3 className="text-2xl md:text-3xl font-bold text-primary leading-tight">
+                          Global Youth Leadership Award
+                        </h3>
+                        <p className="text-sm text-muted-foreground font-medium mt-1">Nepal</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-wider text-primary/70">International Honor</p>
-                      <h3 className="text-xl font-bold text-primary">Global Youth Leadership Award (Nepal)</h3>
-                    </div>
-                    <div className="ml-auto hidden sm:flex items-center gap-2 rounded-full bg-white/80 px-4 py-1.5 text-sm font-medium text-primary border border-primary/20">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#f42a41]" aria-hidden /> Representing Bangladesh
+                    <div className="md:ml-auto flex items-center gap-2.5 rounded-full bg-white/90 px-5 py-2.5 text-sm font-bold text-primary border-2 border-primary/30 shadow-md backdrop-blur-sm">
+                      <span className="h-2 w-2 rounded-full bg-[#f42a41] animate-pulse" aria-hidden />
+                      Representing Bangladesh
                     </div>
                   </div>
                 </div>
-                <CardContent className="p-8">
-                  <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                    In recognition of sustained contribution to mental health advocacy and youth leadership, Lamia
-                    received the <strong className="text-foreground">Global Youth Leadership Award (Nepal)</strong>—an
-                    international honor acknowledging her impact in advancing community-based mental health initiatives.
-                    This recognition positions her among emerging global youth leaders in public health and mental
-                    wellbeing, with cross-border acknowledgment of her work representing Bangladesh.
-                  </p>
+                <CardContent className="p-8 md:p-10">
+                  <div className="space-y-6">
+                    <p className="text-lg md:text-xl text-foreground leading-relaxed font-medium">
+                      In recognition of sustained contribution to mental health advocacy and youth leadership, Lamia
+                      received the <strong className="text-primary">Global Youth Leadership Award (Nepal)</strong>—an
+                      international honor acknowledging her impact in advancing community-based mental health initiatives.
+                    </p>
+                    <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                      This recognition positions her among emerging global youth leaders in public health and mental
+                      wellbeing, with cross-border acknowledgment of her work <strong className="text-primary">representing Bangladesh</strong> in
+                      international mental health and public health discussions.
+                    </p>
+                    <div className="pt-4 flex flex-wrap gap-3">
+                      <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold">
+                        <Users className="h-4 w-4" />
+                        Youth Leadership
+                      </span>
+                      <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold">
+                        <Heart className="h-4 w-4" />
+                        Mental Health Advocacy
+                      </span>
+                      <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold">
+                        <Award className="h-4 w-4" />
+                        International Recognition
+                      </span>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
 
               <div className="grid lg:grid-cols-2 gap-8 items-start">
-                {/* National media outlets - dignified strip */}
-                <Card className="border-l-4 border-primary shadow-lg hover:shadow-xl transition-all duration-300">
-                  <CardContent className="p-8">
-                    <h3 className="text-xl font-bold text-primary mb-2">Featured in National Media</h3>
-                    <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                      Lamia&apos;s work has been profiled by prominent Bangladeshi news outlets, documenting her
+                {/* National media outlets - Premium presentation */}
+                <Card className="border-l-[6px] border-primary shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 bg-white">
+                  <CardContent className="p-8 md:p-10">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="p-2.5 rounded-lg bg-primary/10">
+                        <FileText className="h-6 w-6 text-primary" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-primary">Featured in National Media</h3>
+                    </div>
+                    <p className="text-base text-muted-foreground mb-8 leading-relaxed">
+                      Lamia's work has been profiled by prominent Bangladeshi news outlets, documenting her
                       contributions to youth-led mental health reform, community health systems, and humanitarian engagement.
                     </p>
-                    <div className="space-y-3">
-                      {["The Bangladesh Today", "Daily Janakantha", "RisingBD", "Lalmonirhat Barta"].map((outlet) => (
-                        <div
-                          key={outlet}
-                          className="flex items-center gap-4 rounded-xl border-2 border-primary/10 bg-white px-5 py-4 hover:border-primary/25 hover:bg-primary-light/20 transition-all duration-300"
-                        >
-                          <span className="h-2.5 w-2.5 rounded-full bg-primary flex-shrink-0" aria-hidden />
-                          <span className="font-semibold text-foreground">{outlet}</span>
-                        </div>
-                      ))}
+                    <div className="space-y-4">
+                      {mediaCoverage && mediaCoverage.length > 0 ? (
+                        mediaCoverage.map((outlet: any) => (
+                          <div
+                            key={outlet.id}
+                            className="group flex items-center gap-4 rounded-xl border-2 border-primary/15 bg-gradient-to-r from-white to-primary-light/5 px-6 py-4 hover:border-primary/40 hover:from-primary-light/10 hover:to-primary-light/20 hover:shadow-lg transition-all duration-300"
+                          >
+                            <span className="text-2xl" aria-hidden>{outlet.outlet_icon}</span>
+                            <span className="font-bold text-foreground text-lg group-hover:text-primary transition-colors flex-1">{outlet.outlet_name}</span>
+                            {outlet.article_url ? (
+                              <a
+                                href={outlet.article_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary/50 group-hover:text-primary transition-colors"
+                              >
+                                <ExternalLink className="h-4 w-4" />
+                              </a>
+                            ) : (
+                              <ExternalLink className="h-4 w-4 ml-auto text-primary/50 group-hover:text-primary transition-colors" />
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        <>
+                          {[
+                            { name: "The Bangladesh Today", icon: "📰" },
+                            { name: "Daily Janakantha", icon: "📰" },
+                            { name: "RisingBD", icon: "📰" },
+                            { name: "Lalmonirhat Barta", icon: "📰" }
+                          ].map((outlet) => (
+                            <div
+                              key={outlet.name}
+                              className="group flex items-center gap-4 rounded-xl border-2 border-primary/15 bg-gradient-to-r from-white to-primary-light/5 px-6 py-4 hover:border-primary/40 hover:from-primary-light/10 hover:to-primary-light/20 hover:shadow-lg transition-all duration-300"
+                            >
+                              <span className="text-2xl" aria-hidden>{outlet.icon}</span>
+                              <span className="font-bold text-foreground text-lg group-hover:text-primary transition-colors">{outlet.name}</span>
+                              <ExternalLink className="h-4 w-4 ml-auto text-primary/50 group-hover:text-primary transition-colors" />
+                            </div>
+                          ))}
+                        </>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
 
-                {/* Narrative context */}
-                <Card className="border-l-4 border-primary/80 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <CardContent className="p-8 space-y-5">
-                    <h3 className="text-xl font-bold text-primary">Public Recognition</h3>
+                {/* Impact narrative - Premium context */}
+                <Card className="border-l-[6px] border-primary/70 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 bg-white">
+                  <CardContent className="p-8 md:p-10 space-y-6">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="p-2.5 rounded-lg bg-primary/10">
+                        <Quote className="h-6 w-6 text-primary" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-primary">Public Recognition</h3>
+                    </div>
+                    <p className="text-base md:text-lg text-foreground leading-relaxed font-medium">
+                      Lamia Tasnim's work at the intersection of public health, mental health systems, and youth-led
+                      community action has been profiled by national media in Bangladesh.
+                    </p>
                     <p className="text-base text-muted-foreground leading-relaxed">
-                      Lamia Tasnim&apos;s work at the intersection of public health, mental health systems, and youth-led
-                      community action has been profiled by national media in Bangladesh. These features document her
-                      contributions to system-oriented mental health programming and community health initiatives that
-                      prioritize ethical practice, sustainability, and measurable community-level benefit.
+                      These features document her contributions to system-oriented mental health programming and
+                      community health initiatives that prioritize <strong className="text-primary">ethical practice, sustainability,
+                      and measurable community-level benefit</strong>.
                     </p>
                     <p className="text-base text-muted-foreground leading-relaxed">
                       Coverage has emphasized her role in youth-led mental health reform, community health systems, and
-                      humanitarian engagement with attention to dignity, consent, and cultural sensitivity—strengthening
-                      her position as a key representative of Bangladesh in global mental health and public health
-                      discussions.
+                      humanitarian engagement with attention to dignity, consent, and cultural sensitivity—
+                      <strong className="text-primary"> strengthening her position as a key representative of Bangladesh</strong> in
+                      global mental health and public health discussions.
                     </p>
+                    
+                    {/* Key themes */}
+                    <div className="pt-6 border-t border-primary/10">
+                      <p className="text-sm font-bold text-primary mb-3 uppercase tracking-wide">Key Themes in Coverage</p>
+                      <div className="flex flex-wrap gap-2">
+                        {["Youth Leadership", "Mental Health Reform", "Community Systems", "Ethical Practice", "Humanitarian Work"].map((theme) => (
+                          <span key={theme} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                            {theme}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>

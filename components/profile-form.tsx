@@ -80,6 +80,10 @@ export function ProfileForm({ profile }: ProfileFormProps) {
       linkedin_url: formData.get("linkedin_url") as string,
       facebook_url: formData.get("facebook_url") as string,
       github_url: formData.get("github_url") as string,
+      hero_badge_text: formData.get("hero_badge_text") as string,
+      hero_subtitle: formData.get("hero_subtitle") as string,
+      credential_1_text: formData.get("credential_1_text") as string,
+      credential_2_text: formData.get("credential_2_text") as string,
     }
 
     try {
@@ -215,6 +219,61 @@ export function ProfileForm({ profile }: ProfileFormProps) {
               <Label htmlFor="github_url">GitHub URL</Label>
               <Input id="github_url" name="github_url" defaultValue={profile?.github_url} />
             </div>
+          </div>
+
+          <div className="border-t pt-6 space-y-4">
+            <h3 className="text-lg font-semibold text-primary">Hero Section Customization</h3>
+            
+            <div className="space-y-2">
+              <Label htmlFor="hero_badge_text">Hero Badge Text</Label>
+              <Input
+                id="hero_badge_text"
+                name="hero_badge_text"
+                defaultValue={profile?.hero_badge_text || "Key Representative · Bangladesh"}
+                placeholder="Key Representative · Bangladesh"
+              />
+              <p className="text-sm text-muted-foreground">
+                The badge text displayed at the top of the hero section
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="hero_subtitle">Hero Subtitle</Label>
+              <Input
+                id="hero_subtitle"
+                name="hero_subtitle"
+                defaultValue={profile?.hero_subtitle || "Representing Bangladesh in Global Mental Health & Public Health"}
+                placeholder="Representing Bangladesh in Global Mental Health & Public Health"
+              />
+              <p className="text-sm text-muted-foreground">
+                The subtitle text displayed below the badge
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="credential_1_text">Credential 1</Label>
+                <Input
+                  id="credential_1_text"
+                  name="credential_1_text"
+                  defaultValue={profile?.credential_1_text || "Global Youth Leadership Award"}
+                  placeholder="Global Youth Leadership Award"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="credential_2_text">Credential 2</Label>
+                <Input
+                  id="credential_2_text"
+                  name="credential_2_text"
+                  defaultValue={profile?.credential_2_text || "MPH, North South University"}
+                  placeholder="MPH, North South University"
+                />
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Credentials displayed below the CTA buttons in the hero section
+            </p>
           </div>
 
           <Button type="submit" className="bg-primary hover:bg-primary-dark" disabled={loading}>

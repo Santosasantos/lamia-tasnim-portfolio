@@ -14,6 +14,7 @@ import {
   LogOut,
   Menu,
   X,
+  Newspaper,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
@@ -28,6 +29,7 @@ const navItems = [
   { name: "Publications", href: "/admin/publications", icon: BookOpen },
   { name: "Skills", href: "/admin/skills", icon: Lightbulb },
   { name: "Awards", href: "/admin/awards", icon: Award },
+  { name: "Media Coverage", href: "/admin/media-coverage", icon: Newspaper },
   { name: "Certifications", href: "/admin/certifications", icon: FileText },
   { name: "Volunteering", href: "/admin/volunteering", icon: Heart },
   { name: "Scholarly Activities", href: "/admin/scholarly-activities", icon: GraduationCap },
