@@ -136,18 +136,16 @@ export default async function SkillsPage() {
                   {certifications.map((cert) => (
                     <Card key={cert.id} className="border border-gray-200 hover:shadow-lg transition-all hover:-translate-y-1 overflow-hidden">
                       <CardContent className="p-0">
-                        {/* Certificate Image - Enhanced for Better Visibility */}
-                        <div className="relative w-full h-64 bg-gradient-to-br from-gray-50 via-white to-gray-50 border-b border-gray-200">
+                        {/* Certificate Image */}
+                        <div className="relative w-full h-64 bg-gradient-to-br from-gray-50 via-white to-gray-50 border-b border-gray-200 overflow-hidden">
                           {cert.image ? (
-                            <div className="relative w-full h-full p-6">
-                              <Image
-                                src={cert.image}
-                                alt={cert.name}
-                                fill
-                                className="object-contain drop-shadow-lg"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                              />
-                            </div>
+                            <Image
+                              src={cert.image}
+                              alt={cert.name}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            />
                           ) : (
                             <div className="flex items-center justify-center h-full text-muted-foreground">
                               <Award className="h-20 w-20 opacity-20" />

@@ -86,7 +86,10 @@ export default async function Home() {
   const { data: mediaCoverage } = await supabase
     .from("media_coverage")
     .select("*")
-    .eq("is_featured", true)
+    .order("updated_at", { ascending: false })
+  const { data: certifications } = await supabase
+    .from("certifications")
+    .select("*")
     .order("display_order", { ascending: true })
 
   const researchExperiences = experiences?.filter((exp: any) => exp.category === "Research") || []
@@ -110,9 +113,29 @@ export default async function Home() {
 
   const maxItemsToShow = 3
 
+  const hasEducation = (education?.length ?? 0) > 0
+  const hasExperiences = (experiences?.length ?? 0) > 0
+  const hasScholarlyActivities = (scholarlyActivities?.length ?? 0) > 0
+  const hasPublications = (publications?.length ?? 0) > 0
+  const hasAwards = (awards?.length ?? 0) > 0
+  const hasMediaCoverage = (mediaCoverage?.length ?? 0) > 0
+  const hasSkills = (skills?.length ?? 0) > 0
+  const hasVolunteering = (volunteering?.length ?? 0) > 0
+
+  const hiddenSections: string[] = [
+    ...(!hasEducation ? ["education"] : []),
+    ...(!hasExperiences ? ["experiences"] : []),
+    ...(!hasScholarlyActivities ? ["scholarly-activities"] : []),
+    ...(!hasPublications ? ["publications"] : []),
+    ...(!hasAwards ? ["awards"] : []),
+    ...(!hasMediaCoverage ? ["media-coverage"] : []),
+    ...(!hasSkills ? ["skills"] : []),
+    ...(!hasVolunteering ? ["volunteering"] : []),
+  ]
+
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
+      <Navbar hiddenSections={hiddenSections} profileName={profile?.full_name} />
       <main className="overflow-x-hidden">
         <section
           id="home"
@@ -126,7 +149,7 @@ export default async function Home() {
           <div className="absolute top-20 right-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" aria-hidden />
           <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#f42a41]/5 rounded-full blur-3xl" aria-hidden />
 
-          <div className="relative mx-auto max-w-7xl">
+          <div className="relative mx-auto max-w-6xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-14 items-center">
               <div className="order-2 lg:order-1 space-y-4 sm:space-y-5 text-center lg:text-left animate-slide-from-left">
                 {/* Premium Badge: Key Representative */}
@@ -186,14 +209,9 @@ export default async function Home() {
 
               <div className="order-1 lg:order-2 flex justify-center animate-slide-from-right">
                 <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-[22rem] xl:h-[22rem] group">
-                  {/* Glow effect */}
                   <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-primary/25 via-[#f42a41]/10 to-primary/20 blur-2xl group-hover:from-primary/35 group-hover:via-[#f42a41]/15 group-hover:to-primary/30 transition-all duration-700" aria-hidden />
-                  
-                  {/* Decorative rings */}
                   <div className="absolute inset-0 rounded-full border-4 border-white shadow-[0_0_0_4px_rgba(3,100,69,0.15)] ring-8 ring-primary/5" aria-hidden />
                   <div className="absolute -inset-2 rounded-full border-2 border-primary/20 animate-pulse" aria-hidden />
-                  
-                  {/* Image container */}
                   <div className="relative w-full h-full rounded-full overflow-hidden border-[6px] border-primary shadow-2xl transition-all duration-500 hover:scale-[1.03] hover:shadow-primary/40 hover:border-primary-dark">
                     <Image
                       src={profile?.profile_image || "/placeholder.svg?height=400&width=400"}
@@ -203,8 +221,7 @@ export default async function Home() {
                       priority
                     />
                   </div>
-                  
-                  {/* Bangladesh flag accent - subtle */}
+                  {/* Bangladesh flag */}
                   <div className="absolute -bottom-2 -right-2 w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center border-4 border-primary/20">
                     <div className="w-12 h-12 rounded-full overflow-hidden">
                       <div className="w-full h-full bg-[#006a4e] relative">
@@ -212,6 +229,26 @@ export default async function Home() {
                       </div>
                     </div>
                   </div>
+                  {/* Stat: Publications */}
+                  {(publications?.length ?? 0) > 0 && (
+                    <div className="absolute -top-4 -left-8 bg-white rounded-2xl shadow-xl border border-border/60 px-4 py-3 flex items-center gap-2.5">
+                      <div className="p-2 rounded-xl bg-primary/10 flex-shrink-0"><FileText className="h-4 w-4 text-primary" /></div>
+                      <div>
+                        <p className="text-xl font-bold text-primary leading-none">{publications!.length}+</p>
+                        <p className="text-xs text-muted-foreground font-medium mt-0.5">Publications</p>
+                      </div>
+                    </div>
+                  )}
+                  {/* Stat: Awards */}
+                  {(awards?.length ?? 0) > 0 && (
+                    <div className="absolute -bottom-4 -left-8 bg-white rounded-2xl shadow-xl border border-border/60 px-4 py-3 flex items-center gap-2.5">
+                      <div className="p-2 rounded-xl bg-yellow-50 flex-shrink-0"><Award className="h-4 w-4 text-yellow-600" /></div>
+                      <div>
+                        <p className="text-xl font-bold text-yellow-600 leading-none">{awards!.length}+</p>
+                        <p className="text-xs text-muted-foreground font-medium mt-0.5">Awards</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -229,20 +266,20 @@ export default async function Home() {
 
         {/* Education Section */}
         <section id="education" className="py-20 md:py-24 bg-white scroll-mt-20">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Education</h2>
-              <div className="w-20 h-1.5 bg-primary mx-auto rounded-full mb-6"></div>
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-14">
+              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif italic tracking-tight">Education</h2>
+              <div className="flex items-center justify-center gap-3 mb-6"><div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/60 rounded-full"></div><div className="h-1.5 w-10 bg-primary rounded-full"></div><div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/60 rounded-full"></div></div>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Academic journey and qualifications</p>
             </div>
 
-            <div className="max-w-4xl mx-auto space-y-6">
+            <div className="space-y-5 max-w-4xl mx-auto">
               {education?.map((edu: any) => (
                 <Card
                   key={edu.id}
-                  className="border-l-4 border-primary hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="border-l-4 border-[#0d9488] hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 bg-white"
                 >
-                  <CardContent className="p-8">
+                  <CardContent className="p-6">
                     <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-4">
                       <h3 className="text-2xl font-bold text-primary">{edu.degree}</h3>
                       <span className="text-sm font-semibold bg-primary text-white px-4 py-1.5 rounded-full whitespace-nowrap self-start">
@@ -277,19 +314,19 @@ export default async function Home() {
         </section>
 
         {/* Experiences Section with Tabs */}
-        <section id="experiences" className="py-20 md:py-24 bg-muted/30 scroll-mt-20">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Professional Experience</h2>
-              <div className="w-20 h-1.5 bg-primary mx-auto rounded-full mb-6"></div>
+        <section id="experiences" className="py-20 md:py-24 bg-[#f8fafc] scroll-mt-20">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-14">
+              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif italic tracking-tight">Professional Experience</h2>
+              <div className="flex items-center justify-center gap-3 mb-6"><div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/60 rounded-full"></div><div className="h-1.5 w-10 bg-primary rounded-full"></div><div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/60 rounded-full"></div></div>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 A focused overview of my work across public health research, mental health systems leadership, and
-                community-scale programming—bridging evidence, ethics, and implementation.
+                community-scale programming€”bridging evidence, ethics, and implementation.
               </p>
             </div>
 
-            <Tabs defaultValue="research" className="max-w-5xl mx-auto">
-              <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12 h-auto p-1 bg-white shadow-sm">
+            <Tabs defaultValue="research" className="w-full">
+              <TabsList className="grid w-full max-w-sm mx-auto grid-cols-2 mb-10 h-auto p-1 bg-white border border-border rounded-xl shadow-sm">
                 <TabsTrigger
                   value="research"
                   className="data-[state=active]:bg-primary data-[state=active]:text-white py-3 text-base font-semibold"
@@ -310,7 +347,7 @@ export default async function Home() {
                     key={exp.id}
                     className="border-l-4 border-primary hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                   >
-                    <CardContent className="p-8">
+                    <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6">
                         <div className="flex-1">
                           <h3 className="text-2xl font-bold text-foreground mb-3">{exp.position}</h3>
@@ -348,7 +385,7 @@ export default async function Home() {
                         <ul className="space-y-3">
                           {exp.responsibilities.map((responsibility: any, index: number) => (
                             <li key={index} className="flex gap-3 text-base">
-                              <span className="text-primary font-bold text-lg">•</span>
+                              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 inline-block"></span>
                               <span className="text-muted-foreground leading-relaxed">{responsibility}</span>
                             </li>
                           ))}
@@ -378,7 +415,7 @@ export default async function Home() {
 
                 {researchExperiences.length > maxItemsToShow && (
                   <div className="flex justify-center pt-4">
-                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark font-semibold">
+                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition-all">
                       <Link href="/experiences">
                         View All Experiences ({researchExperiences.length}) <ExternalLink className="ml-2 h-5 w-5" />
                       </Link>
@@ -393,7 +430,7 @@ export default async function Home() {
                     key={exp.id}
                     className="border-l-4 border-primary hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                   >
-                    <CardContent className="p-8">
+                    <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6">
                         <div className="flex-1">
                           <h3 className="text-2xl font-bold text-foreground mb-3">{exp.position}</h3>
@@ -431,7 +468,7 @@ export default async function Home() {
                         <ul className="space-y-3">
                           {exp.responsibilities.map((responsibility: any, index: number) => (
                             <li key={index} className="flex gap-3 text-base">
-                              <span className="text-primary font-bold text-lg">•</span>
+                              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 inline-block"></span>
                               <span className="text-muted-foreground leading-relaxed">{responsibility}</span>
                             </li>
                           ))}
@@ -445,7 +482,7 @@ export default async function Home() {
                 )}
                 {industryExperiences.length > maxItemsToShow && (
                   <div className="flex justify-center pt-8">
-                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark font-semibold">
+                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition-all">
                       <Link href="/experiences">
                         View All Experiences ({industryExperiences.length}) <ExternalLink className="ml-2 h-5 w-5" />
                       </Link>
@@ -459,23 +496,23 @@ export default async function Home() {
 
         {/* Scholarly Activities Section */}
         <section id="scholarly-activities" className="py-20 md:py-24 bg-white scroll-mt-20">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Scholarly Activities</h2>
-              <div className="w-20 h-1.5 bg-primary mx-auto rounded-full mb-6"></div>
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-14">
+              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif italic tracking-tight">Scholarly Activities</h2>
+              <div className="flex items-center justify-center gap-3 mb-6"><div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/60 rounded-full"></div><div className="h-1.5 w-10 bg-primary rounded-full"></div><div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/60 rounded-full"></div></div>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Conference presentations, workshops, and academic engagements showcasing research dissemination and
                 professional development.
               </p>
             </div>
 
-            <div className="max-w-4xl mx-auto space-y-6">
+            <div className="space-y-5 max-w-4xl mx-auto">
               {scholarlyActivities?.slice(0, maxItemsToShow).map((activity: any) => (
                 <Card
                   key={activity.id}
-                  className="border-l-4 border-primary hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="border-l-4 border-amber-500 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 bg-white"
                 >
-                  <CardContent className="p-8">
+                  <CardContent className="p-6">
                     <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-3">
                       <h3 className="text-xl font-bold text-foreground flex-1 leading-snug">{activity.title}</h3>
                       <span className="text-xs font-semibold bg-primary text-white px-4 py-1.5 rounded-full whitespace-nowrap self-start">
@@ -499,7 +536,7 @@ export default async function Home() {
               ))}
               {scholarlyActivities && scholarlyActivities.length > maxItemsToShow && (
                 <div className="flex justify-center pt-8">
-                  <Button asChild size="lg" className="bg-primary hover:bg-primary-dark font-semibold">
+                  <Button asChild size="lg" className="bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition-all">
                     <Link href="/scholarly-activities">
                       View All Activities ({scholarlyActivities.length}) <ExternalLink className="ml-2 h-5 w-5" />
                     </Link>
@@ -511,19 +548,19 @@ export default async function Home() {
         </section>
 
         {/* Publications Section with Tabs */}
-        <section id="publications" className="py-20 md:py-24 bg-muted/30 scroll-mt-20">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Publications</h2>
-              <div className="w-20 h-1.5 bg-primary mx-auto rounded-full mb-6"></div>
+        <section id="publications" className="py-20 md:py-24 bg-[#f8fafc] scroll-mt-20">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-14">
+              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif italic tracking-tight">Publications</h2>
+              <div className="flex items-center justify-center gap-3 mb-6"><div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/60 rounded-full"></div><div className="h-1.5 w-10 bg-primary rounded-full"></div><div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/60 rounded-full"></div></div>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 A collection of my academic contributions, including peer-reviewed articles, conference presentations,
                 and ongoing research projects.
               </p>
             </div>
 
-            <Tabs defaultValue="academic" className="max-w-5xl mx-auto">
-              <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-4 mb-12 h-auto p-1 bg-white shadow-sm">
+            <Tabs defaultValue="academic" className="w-full">
+              <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 mb-10 h-auto p-1 bg-white border border-border rounded-xl shadow-sm">
                 <TabsTrigger
                   value="academic"
                   className="data-[state=active]:bg-primary data-[state=active]:text-white py-3 text-xs md:text-sm font-semibold"
@@ -641,7 +678,7 @@ export default async function Home() {
                 )}
                 {academicPublications.length > maxItemsToShow && (
                   <div className="flex justify-center pt-8">
-                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark font-semibold">
+                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition-all">
                       <Link href="/publications">
                         View All Publications ({academicPublications.length}) <ExternalLink className="ml-2 h-5 w-5" />
                       </Link>
@@ -663,7 +700,7 @@ export default async function Home() {
                 )}
                 {conferencePublications.length > maxItemsToShow && (
                   <div className="flex justify-center pt-8">
-                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark font-semibold">
+                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition-all">
                       <Link href="/publications">
                         View All Conference Publications ({conferencePublications.length}){" "}
                         <ExternalLink className="ml-2 h-5 w-5" />
@@ -705,7 +742,7 @@ export default async function Home() {
                 )}
                 {nonAcademicPublications.length > maxItemsToShow && (
                   <div className="flex justify-center pt-8">
-                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark font-semibold">
+                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition-all">
                       <Link href="/publications">
                         View All Publications ({nonAcademicPublications.length}){" "}
                         <ExternalLink className="ml-2 h-5 w-5" />
@@ -721,7 +758,7 @@ export default async function Home() {
                     key={pub.id}
                     className="border-l-4 border-yellow-500 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                   >
-                    <CardContent className="p-8">
+                    <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-4">
                         <h4 className="text-xl font-bold text-foreground flex-1 leading-snug">{pub.title}</h4>
                         {pub.status && (
@@ -776,7 +813,7 @@ export default async function Home() {
                 )}
                 {workInProgress.length > maxItemsToShow && (
                   <div className="flex justify-center pt-8">
-                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark font-semibold">
+                    <Button asChild size="lg" className="bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition-all">
                       <Link href="/publications">
                         View All Publications ({workInProgress.length}) <ExternalLink className="ml-2 h-5 w-5" />
                       </Link>
@@ -790,271 +827,181 @@ export default async function Home() {
 
         {/* Awards Section */}
         <section id="awards" className="py-20 md:py-24 bg-white scroll-mt-20">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Honors & Awards</h2>
-              <div className="w-20 h-1.5 bg-primary mx-auto rounded-full mb-6"></div>
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-14">
+              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif italic tracking-tight">Honors & Awards</h2>
+              <div className="flex items-center justify-center gap-3 mb-6"><div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/60 rounded-full"></div><div className="h-1.5 w-10 bg-primary rounded-full"></div><div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/60 rounded-full"></div></div>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Recognition and achievements demonstrating academic excellence and outstanding contributions.
               </p>
             </div>
 
-            <div className="max-w-6xl mx-auto">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {awards?.slice(0, 6).map((award: any) => (
-                  <Card
-                    key={award.id}
-                    className="border-t-4 border-primary hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
-                  >
-                    <CardContent className="p-0">
-                      {/* Award Image */}
-                      <div className="relative w-full h-64 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
-                        {award.image ? (
-                          <Image
-                            src={award.image}
-                            alt={award.title}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          />
-                        ) : (
-                          <div className="flex items-center justify-center h-full">
-                            <Award className="h-20 w-20 text-gray-300" />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Award Details */}
-                      <div className="p-6">
-                        <div className="flex flex-col items-center text-center">
-                          <h3 className="text-lg font-bold text-foreground mb-2 leading-snug">{award.title}</h3>
-                          <p className="text-base font-semibold text-primary mb-3">{award.issuer}</p>
-                          {award.date && (
-                            <p className="text-sm text-muted-foreground mb-3">{award.date}</p>
-                          )}
-                          {award.description && (
-                            <p className="text-sm text-muted-foreground leading-relaxed">{award.description}</p>
-                          )}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              {awards?.slice(0, 8).map((award: any) => (
+                <Card
+                  key={award.id}
+                  className="border-t-4 border-amber-500 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden bg-white"
+                >
+                  <CardContent className="p-0">
+                    <div className="relative w-full h-56 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                      {award.image ? (
+                        <Image
+                          src={award.image}
+                          alt={award.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full">
+                          <Award className="h-16 w-16 text-gray-300" />
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-              {awards && awards.length > 6 && (
-                <div className="flex justify-center pt-12">
-                  <Button asChild size="lg" className="bg-primary hover:bg-primary-dark font-semibold">
-                    <Link href="/awards">
-                      View All Awards ({awards.length}) <ExternalLink className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
-                </div>
-              )}
+                      )}
+                    </div>
+                    <div className="p-5">
+                      <h3 className="text-sm font-bold text-foreground mb-1 line-clamp-2 leading-snug">{award.title}</h3>
+                      <p className="text-xs font-semibold text-primary mb-1">{award.issuer}</p>
+                      {award.date && <p className="text-xs text-muted-foreground">{award.date}</p>}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
+            {awards && awards.length > 8 && (
+              <div className="flex justify-center pt-10">
+                <Button asChild size="lg" className="bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition-all">
+                  <Link href="/awards">
+                    View All Awards ({awards.length}) <ExternalLink className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              </div>
+            )}
           </div>
         </section>
 
-        {/* Media Coverage Section - International prestige & national recognition */}
-        <section id="media-coverage" className="relative overflow-hidden py-28 md:py-32 scroll-mt-20">
-          {/* Premium gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-light/30 via-white to-primary-light/20" aria-hidden />
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 30% 70%, #006a4e 1px, transparent 1px), radial-gradient(circle at 70% 30%, #f42a41 1px, transparent 1px)", backgroundSize: "80px 80px" }} aria-hidden />
-          
-          {/* Decorative elements */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" aria-hidden />
-          <div className="absolute top-20 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" aria-hidden />
-          <div className="absolute bottom-20 left-0 w-96 h-96 bg-[#f42a41]/5 rounded-full blur-3xl" aria-hidden />
-          
-          <div className="relative container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-20">
-              {/* Premium badge */}
-              <div className="inline-flex items-center gap-2.5 rounded-full border-2 border-primary/50 bg-white/90 px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-primary/80 shadow-lg backdrop-blur-md mb-6">
-                <Award className="h-4 w-4" />
-                National & International Recognition
-              </div>
-              
-              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 tracking-tight">
-                Media Coverage & Public Recognition
-              </h2>
-              <div className="w-20 h-1.5 bg-primary mx-auto rounded-full mb-6"></div>
+        {/* Media Coverage Section - News-style layout */}
+        {hasMediaCoverage && (
+        <section id="media-coverage" className="py-20 md:py-24 bg-white scroll-mt-20">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif italic tracking-tight">Media Coverage</h2>
+              <div className="flex items-center justify-center gap-3 mb-6"><div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/60 rounded-full"></div><div className="h-1.5 w-10 bg-primary rounded-full"></div><div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/60 rounded-full"></div></div>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Featured in prominent national media and recognized internationally for advancing youth-led mental health
-                reform, community health systems, and ethically grounded humanitarian engagement—representing Bangladesh
-                on the global stage.
+                Featured in national and international media for contributions to public health, mental health advocacy, and youth leadership.
               </p>
             </div>
 
-            <div className="max-w-6xl mx-auto space-y-10">
-              {/* International Award - Premium spotlight */}
-              <Card className="overflow-hidden border-4 border-primary/40 shadow-2xl shadow-primary/10 bg-gradient-to-br from-white via-primary-light/5 to-white hover:shadow-3xl hover:shadow-primary/15 transition-all duration-700 hover:-translate-y-1">
-                <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent px-8 py-6 border-b-2 border-primary/20">
-                  <div className="flex flex-col md:flex-row md:items-center gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-lg">
-                        <Award className="h-8 w-8 text-white" />
+            {mediaCoverage && mediaCoverage.length > 0 && (
+              <div className="grid lg:grid-cols-5 gap-0 lg:gap-10 w-full">
+
+                {/* Featured story — left */}
+                <div className="lg:col-span-3 mb-10 lg:mb-0">
+                  {mediaCoverage[0].article_url ? (
+                    <a href={mediaCoverage[0].article_url} target="_blank" rel="noopener noreferrer" className="group block">
+                      <div className="relative w-full h-64 md:h-72 overflow-hidden rounded-lg bg-muted">
+                        {mediaCoverage[0].cover_image ? (
+                          <Image src={mediaCoverage[0].cover_image} alt={mediaCoverage[0].outlet_name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-primary/5">
+                            <FileText className="h-16 w-16 text-primary/20" />
+                          </div>
+                        )}
                       </div>
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-wider text-primary/70 mb-1">International Honor</p>
-                        <h3 className="text-2xl md:text-3xl font-bold text-primary leading-tight">
-                          Global Youth Leadership Award
+                      <div className="mt-4">
+                        <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">{mediaCoverage[0].outlet_name}</p>
+                        <h3 className="text-xl md:text-2xl font-bold text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-3">
+                          {mediaCoverage[0].article_title || mediaCoverage[0].outlet_name}
                         </h3>
-                        <p className="text-sm text-muted-foreground font-medium mt-1">Nepal</p>
+                        {mediaCoverage[0].description && (
+                          <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-3">{mediaCoverage[0].description}</p>
+                        )}
+                      </div>
+                    </a>
+                  ) : (
+                    <div>
+                      <div className="relative w-full h-64 md:h-72 overflow-hidden rounded-lg bg-muted">
+                        {mediaCoverage[0].cover_image ? (
+                          <Image src={mediaCoverage[0].cover_image} alt={mediaCoverage[0].outlet_name} fill className="object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-primary/5">
+                            <FileText className="h-16 w-16 text-primary/20" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="mt-4">
+                        <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">{mediaCoverage[0].outlet_name}</p>
+                        <h3 className="text-xl md:text-2xl font-bold text-foreground leading-snug line-clamp-3">
+                          {mediaCoverage[0].article_title || mediaCoverage[0].outlet_name}
+                        </h3>
+                        {mediaCoverage[0].description && (
+                          <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-3">{mediaCoverage[0].description}</p>
+                        )}
                       </div>
                     </div>
-                    <div className="md:ml-auto flex items-center gap-2.5 rounded-full bg-white/90 px-5 py-2.5 text-sm font-bold text-primary border-2 border-primary/30 shadow-md backdrop-blur-sm">
-                      <span className="h-2 w-2 rounded-full bg-[#f42a41] animate-pulse" aria-hidden />
-                      Representing Bangladesh
+                  )}
+                </div>
+
+                {/* Side list — right */}
+                <div className="lg:col-span-2 flex flex-col divide-y divide-border">
+                  {mediaCoverage.slice(1, 5).map((item: any) => (
+                    <div key={item.id} className="flex gap-4 py-4 first:pt-0 group">
+                      {/* Thumbnail */}
+                      <div className="relative w-20 h-16 flex-shrink-0 overflow-hidden rounded bg-muted">
+                        {item.cover_image ? (
+                          <Image src={item.cover_image} alt={item.outlet_name} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-primary/5">
+                            <FileText className="h-6 w-6 text-primary/20" />
+                          </div>
+                        )}
+                      </div>
+                      {/* Text */}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">{item.outlet_name}</p>
+                        {item.article_url ? (
+                          <a href={item.article_url} target="_blank" rel="noopener noreferrer" className="font-semibold text-sm text-foreground leading-snug line-clamp-2 hover:text-primary transition-colors">
+                            {item.article_title || item.outlet_name}
+                          </a>
+                        ) : (
+                          <p className="font-semibold text-sm text-foreground leading-snug line-clamp-2">
+                            {item.article_title || item.outlet_name}
+                          </p>
+                        )}
+                        {item.description && (
+                          <p className="text-xs text-muted-foreground mt-1 line-clamp-1">{item.description}</p>
+                        )}
+                      </div>
                     </div>
+                  ))}
+
+                  <div className="pt-4 text-right">
+                    <Link href="/media-coverage" className="text-sm font-semibold text-primary hover:underline inline-flex items-center gap-1">
+                      See full coverage <ExternalLink className="h-3.5 w-3.5" />
+                    </Link>
                   </div>
                 </div>
-                <CardContent className="p-8 md:p-10">
-                  <div className="space-y-6">
-                    <p className="text-lg md:text-xl text-foreground leading-relaxed font-medium">
-                      In recognition of sustained contribution to mental health advocacy and youth leadership, Lamia
-                      received the <strong className="text-primary">Global Youth Leadership Award (Nepal)</strong>—an
-                      international honor acknowledging her impact in advancing community-based mental health initiatives.
-                    </p>
-                    <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                      This recognition positions her among emerging global youth leaders in public health and mental
-                      wellbeing, with cross-border acknowledgment of her work <strong className="text-primary">representing Bangladesh</strong> in
-                      international mental health and public health discussions.
-                    </p>
-                    <div className="pt-4 flex flex-wrap gap-3">
-                      <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold">
-                        <Users className="h-4 w-4" />
-                        Youth Leadership
-                      </span>
-                      <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold">
-                        <Heart className="h-4 w-4" />
-                        Mental Health Advocacy
-                      </span>
-                      <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold">
-                        <Award className="h-4 w-4" />
-                        International Recognition
-                      </span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
 
-              <div className="grid lg:grid-cols-2 gap-8 items-start">
-                {/* National media outlets - Premium presentation */}
-                <Card className="border-l-[6px] border-primary shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 bg-white">
-                  <CardContent className="p-8 md:p-10">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="p-2.5 rounded-lg bg-primary/10">
-                        <FileText className="h-6 w-6 text-primary" />
-                      </div>
-                      <h3 className="text-2xl font-bold text-primary">Featured in National Media</h3>
-                    </div>
-                    <p className="text-base text-muted-foreground mb-8 leading-relaxed">
-                      Lamia's work has been profiled by prominent Bangladeshi news outlets, documenting her
-                      contributions to youth-led mental health reform, community health systems, and humanitarian engagement.
-                    </p>
-                    <div className="space-y-4">
-                      {mediaCoverage && mediaCoverage.length > 0 ? (
-                        mediaCoverage.map((outlet: any) => (
-                          <div
-                            key={outlet.id}
-                            className="group flex items-center gap-4 rounded-xl border-2 border-primary/15 bg-gradient-to-r from-white to-primary-light/5 px-6 py-4 hover:border-primary/40 hover:from-primary-light/10 hover:to-primary-light/20 hover:shadow-lg transition-all duration-300"
-                          >
-                            <span className="text-2xl" aria-hidden>{outlet.outlet_icon}</span>
-                            <span className="font-bold text-foreground text-lg group-hover:text-primary transition-colors flex-1">{outlet.outlet_name}</span>
-                            {outlet.article_url ? (
-                              <a
-                                href={outlet.article_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-primary/50 group-hover:text-primary transition-colors"
-                              >
-                                <ExternalLink className="h-4 w-4" />
-                              </a>
-                            ) : (
-                              <ExternalLink className="h-4 w-4 ml-auto text-primary/50 group-hover:text-primary transition-colors" />
-                            )}
-                          </div>
-                        ))
-                      ) : (
-                        <>
-                          {[
-                            { name: "The Bangladesh Today", icon: "📰" },
-                            { name: "Daily Janakantha", icon: "📰" },
-                            { name: "RisingBD", icon: "📰" },
-                            { name: "Lalmonirhat Barta", icon: "📰" }
-                          ].map((outlet) => (
-                            <div
-                              key={outlet.name}
-                              className="group flex items-center gap-4 rounded-xl border-2 border-primary/15 bg-gradient-to-r from-white to-primary-light/5 px-6 py-4 hover:border-primary/40 hover:from-primary-light/10 hover:to-primary-light/20 hover:shadow-lg transition-all duration-300"
-                            >
-                              <span className="text-2xl" aria-hidden>{outlet.icon}</span>
-                              <span className="font-bold text-foreground text-lg group-hover:text-primary transition-colors">{outlet.name}</span>
-                              <ExternalLink className="h-4 w-4 ml-auto text-primary/50 group-hover:text-primary transition-colors" />
-                            </div>
-                          ))}
-                        </>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Impact narrative - Premium context */}
-                <Card className="border-l-[6px] border-primary/70 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 bg-white">
-                  <CardContent className="p-8 md:p-10 space-y-6">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="p-2.5 rounded-lg bg-primary/10">
-                        <Quote className="h-6 w-6 text-primary" />
-                      </div>
-                      <h3 className="text-2xl font-bold text-primary">Public Recognition</h3>
-                    </div>
-                    <p className="text-base md:text-lg text-foreground leading-relaxed font-medium">
-                      Lamia Tasnim's work at the intersection of public health, mental health systems, and youth-led
-                      community action has been profiled by national media in Bangladesh.
-                    </p>
-                    <p className="text-base text-muted-foreground leading-relaxed">
-                      These features document her contributions to system-oriented mental health programming and
-                      community health initiatives that prioritize <strong className="text-primary">ethical practice, sustainability,
-                      and measurable community-level benefit</strong>.
-                    </p>
-                    <p className="text-base text-muted-foreground leading-relaxed">
-                      Coverage has emphasized her role in youth-led mental health reform, community health systems, and
-                      humanitarian engagement with attention to dignity, consent, and cultural sensitivity—
-                      <strong className="text-primary"> strengthening her position as a key representative of Bangladesh</strong> in
-                      global mental health and public health discussions.
-                    </p>
-                    
-                    {/* Key themes */}
-                    <div className="pt-6 border-t border-primary/10">
-                      <p className="text-sm font-bold text-primary mb-3 uppercase tracking-wide">Key Themes in Coverage</p>
-                      <div className="flex flex-wrap gap-2">
-                        {["Youth Leadership", "Mental Health Reform", "Community Systems", "Ethical Practice", "Humanitarian Work"].map((theme) => (
-                          <span key={theme} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
-                            {theme}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
               </div>
-            </div>
+            )}
           </div>
         </section>
+        )}
 
         {/* Skills Section with Tabs */}
-        <section id="skills" className="py-20 md:py-24 bg-muted/30 scroll-mt-20">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Skills & Expertise</h2>
-              <div className="w-20 h-1.5 bg-primary mx-auto rounded-full mb-6"></div>
+        <section id="skills" className="py-20 md:py-24 bg-[#f8fafc] scroll-mt-20">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-14">
+              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif italic tracking-tight">Skills & Expertise</h2>
+              <div className="flex items-center justify-center gap-3 mb-6"><div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/60 rounded-full"></div><div className="h-1.5 w-10 bg-primary rounded-full"></div><div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/60 rounded-full"></div></div>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Technical proficiencies and interpersonal competencies developed through academic training and practical
                 experience.
               </p>
             </div>
 
-            <div className="max-w-6xl mx-auto space-y-8">
+            <div className="w-full space-y-8">
               <Tabs defaultValue="technical" className="w-full">
-                <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-3 mb-12 h-auto p-1 bg-white shadow-sm">
+                <TabsList className="grid w-full max-w-lg mx-auto grid-cols-3 mb-10 h-auto p-1 bg-white border border-border rounded-xl shadow-sm">
                   <TabsTrigger
                     value="technical"
                     className="data-[state=active]:bg-primary data-[state=active]:text-white py-3 text-base font-semibold"
@@ -1157,7 +1104,7 @@ export default async function Home() {
                                 </div>
                               ) : (
                                 <div className="w-32 h-24 flex items-center justify-center text-6xl">
-                                  🌐
+                                  ðŸŒ
                                 </div>
                               )}
                               <div className="space-y-1">
@@ -1190,53 +1137,103 @@ export default async function Home() {
               </Tabs>
 
               <div className="flex justify-center pt-8">
-                <Button asChild size="lg" className="bg-primary hover:bg-primary-dark font-semibold">
+                <Button asChild size="lg" className="bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition-all">
                   <Link href="/skills">
                     View All Skills & Courses <ExternalLink className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
               </div>
+
+              {/* Certifications */}
+              {certifications && certifications.length > 0 && (
+                <div className="mt-16 pt-12 border-t border-border">
+                  <div className="text-center mb-10">
+                    <h3 className="text-2xl md:text-3xl font-bold text-primary mb-3">Certifications & Courses</h3>
+                    <div className="w-16 h-1 bg-primary mx-auto rounded-full"></div>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {certifications.slice(0, 8).map((cert: any) => (
+                      <Card
+                        key={cert.id}
+                        className="border-t-4 border-[#0d9488] hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden bg-white"
+                      >
+                        <CardContent className="p-0">
+                          <div className="relative w-full h-56 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                            {cert.image ? (
+                              <Image
+                                src={cert.image}
+                                alt={cert.name}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                              />
+                            ) : (
+                              <div className="flex items-center justify-center h-full">
+                                <Award className="h-16 w-16 text-gray-300" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="p-5">
+                            <h4 className="text-sm font-bold text-foreground mb-1 line-clamp-2 leading-snug">{cert.name}</h4>
+                            <p className="text-xs font-semibold text-primary mb-1">{cert.issuer}</p>
+                            {cert.issue_date && <p className="text-xs text-muted-foreground">{cert.issue_date}</p>}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                  {certifications.length > 8 && (
+                    <div className="flex justify-center pt-8">
+                      <Button asChild size="lg" className="bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition-all">
+                        <Link href="/skills">
+                          View All Certifications ({certifications.length}) <ExternalLink className="ml-2 h-5 w-5" />
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </section>
 
         {/* Volunteering Section */}
         <section id="volunteering" className="py-20 md:py-24 bg-white scroll-mt-20">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Community Service</h2>
-              <div className="w-20 h-1.5 bg-primary mx-auto rounded-full mb-6"></div>
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-14">
+              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif italic tracking-tight">Community Service</h2>
+              <div className="flex items-center justify-center gap-3 mb-6"><div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/60 rounded-full"></div><div className="h-1.5 w-10 bg-primary rounded-full"></div><div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/60 rounded-full"></div></div>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Community service and volunteer activities demonstrating commitment to social responsibility and
                 community engagement.
               </p>
             </div>
 
-            <div className="max-w-4xl mx-auto space-y-6">
+            <div className="space-y-5 max-w-4xl mx-auto">
               {volunteering?.slice(0, maxItemsToShow).map((activity: any) => (
                 <Card
                   key={activity.id}
-                  className="border-l-4 border-primary hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="border-l-4 border-rose-400 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 bg-white"
                 >
-                  <CardContent className="p-8">
-                    <div className="flex items-start gap-6">
-                      <div className="p-4 bg-primary/10 rounded-xl flex-shrink-0">
-                        <Heart className="h-8 w-8 text-primary" />
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-5">
+                      <div className="p-3 bg-rose-50 rounded-xl flex-shrink-0">
+                        <Heart className="h-6 w-6 text-rose-500" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-2xl font-bold text-foreground mb-3">{activity.role}</h3>
-                        <div className="flex items-center gap-3 text-primary font-semibold text-lg mb-3">
-                          <Building2 className="h-5 w-5" />
+                        <h3 className="text-xl font-bold text-foreground mb-2">{activity.role}</h3>
+                        <div className="flex items-center gap-2 text-primary font-semibold mb-2">
+                          <Building2 className="h-4 w-4" />
                           <span>{activity.organization}</span>
                         </div>
-                        <div className="flex items-center gap-3 text-base text-muted-foreground mb-4">
-                          <Calendar className="h-5 w-5" />
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                          <Calendar className="h-4 w-4" />
                           <span className="font-medium">
                             {activity.start_date} - {activity.end_date}
                           </span>
                         </div>
                         {activity.description && (
-                          <p className="text-base text-muted-foreground leading-relaxed">{activity.description}</p>
+                          <p className="text-sm text-muted-foreground leading-relaxed">{activity.description}</p>
                         )}
                       </div>
                     </div>
@@ -1245,7 +1242,7 @@ export default async function Home() {
               ))}
               {volunteering && volunteering.length > maxItemsToShow && (
                 <div className="flex justify-center pt-8">
-                  <Button asChild size="lg" className="bg-primary hover:bg-primary-dark font-semibold">
+                  <Button asChild size="lg" className="bg-primary hover:bg-primary-dark text-white font-semibold shadow-md hover:shadow-lg transition-all">
                     <Link href="/volunteering">
                       View All Volunteering ({volunteering.length}) <ExternalLink className="ml-2 h-5 w-5" />
                     </Link>
@@ -1257,11 +1254,11 @@ export default async function Home() {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="py-20 md:py-24 bg-muted/30 scroll-mt-20">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Get in Touch</h2>
-              <div className="w-20 h-1.5 bg-primary mx-auto rounded-full mb-6"></div>
+        <section id="contact" className="py-20 md:py-24 bg-[#f8fafc] scroll-mt-20">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-14">
+              <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif italic tracking-tight">Get in Touch</h2>
+              <div className="flex items-center justify-center gap-3 mb-6"><div className="h-px w-12 bg-gradient-to-r from-transparent to-primary/60 rounded-full"></div><div className="h-1.5 w-10 bg-primary rounded-full"></div><div className="h-px w-12 bg-gradient-to-l from-transparent to-primary/60 rounded-full"></div></div>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 I welcome opportunities for collaboration, research partnerships, and professional engagement. Feel free
                 to reach out for public health and mental health systems work, speaking engagements, or program design
@@ -1269,11 +1266,11 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12">
+            <div className="w-full grid lg:grid-cols-2 gap-12">
               {/* Contact Information */}
               <div className="space-y-6">
                 <Card className="border-2 border-primary/20 shadow-lg">
-                  <CardContent className="p-8">
+                  <CardContent className="p-6">
                     <h3 className="text-2xl font-bold text-primary mb-8">Contact Information</h3>
                     <div className="space-y-6">
                       <div className="flex items-start gap-4">
@@ -1348,7 +1345,7 @@ export default async function Home() {
               {/* Contact Form */}
               <div>
                 <Card className="border-2 border-primary/20 shadow-lg">
-                  <CardContent className="p-8">
+                  <CardContent className="p-6">
                     <h3 className="text-2xl font-bold text-primary mb-6">Send a Message</h3>
                     <ContactForm />
                   </CardContent>

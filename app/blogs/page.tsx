@@ -56,7 +56,7 @@ export default async function BlogsPage() {
                     {blog.excerpt && <p className="text-sm text-muted-foreground mb-4 text-pretty">{blog.excerpt}</p>}
                     {blog.tags && blog.tags.length > 0 && (
                       <div className="flex flex-wrap gap-2 mb-4">
-                        {blog.tags.slice(0, 3).map((tag, index) => (
+                        {blog.tags.slice(0, 3).map((tag: any, index: number) => (
                           <span key={index} className="text-xs bg-primary-light text-primary px-2 py-1 rounded">
                             {tag}
                           </span>

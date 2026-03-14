@@ -35,6 +35,7 @@ export function MediaCoverageForm({ mediaCoverage }: MediaCoverageFormProps) {
     const supabase = createClient()
 
     const formData = new FormData(form)
+    const now = new Date().toISOString()
     const data = {
       outlet_name: formData.get("outlet_name") as string,
       outlet_icon: formData.get("outlet_icon") as string,
@@ -43,6 +44,7 @@ export function MediaCoverageForm({ mediaCoverage }: MediaCoverageFormProps) {
       publication_date: formData.get("publication_date") as string,
       description: formData.get("description") as string,
       is_featured: isFeatured,
+      updated_at: now,
     }
 
     try {
@@ -57,7 +59,7 @@ export function MediaCoverageForm({ mediaCoverage }: MediaCoverageFormProps) {
           description: "Media coverage updated successfully.",
         })
       } else {
-        const { error: insertError } = await supabase.from("media_coverage").insert(data)
+        const { error: insertError } = await supabase.from("media_coverage").insert({ ...data, created_at: now })
         if (insertError) throw insertError
         toast({
           title: "Success!",

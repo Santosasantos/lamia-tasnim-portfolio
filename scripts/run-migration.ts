@@ -7,7 +7,8 @@
 import { createClient } from '@supabase/supabase-js'
 import * as fs from 'fs'
 import * as path from 'path'
-import * as dotenv from 'dotenv'
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const dotenv = require('dotenv')
 
 // Load environment variables
 dotenv.config({ path: '.env.local' })
@@ -35,9 +36,9 @@ async function executeSQL(sql: string): Promise<boolean> {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'apikey': supabaseServiceKey,
+        'apikey': supabaseServiceKey as string,
         'Authorization': `Bearer ${supabaseServiceKey}`,
-      },
+      } as HeadersInit,
       body: JSON.stringify({ sql_query: sql }),
     })
 

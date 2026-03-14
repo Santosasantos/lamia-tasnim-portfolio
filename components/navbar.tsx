@@ -21,12 +21,12 @@ const navItems = [
   { name: "Contact", href: "/contact", scrollTo: "contact" },
 ]
 
-export function Navbar() {
+export function Navbar({ hiddenSections = [], profileName }: { hiddenSections?: string[]; profileName?: string }) {
   const pathname = usePathname()
   const router = useRouter()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [portfolioName, setPortfolioName] = useState("Lamia Tasnim")
+  const [portfolioName, setPortfolioName] = useState(profileName || "Lamia Tasnim")
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,6 +38,7 @@ export function Navbar() {
   }, [])
 
   useEffect(() => {
+    if (profileName) return // already provided by server
     let isMounted = true
     const supabase = createClient()
 
@@ -144,7 +145,7 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1 flex-shrink-0">
-            {navItems.map((item) => {
+            {navItems.filter(item => !hiddenSections.includes(item.scrollTo)).map((item) => {
               const isActive = pathname === item.href
               return (
                 <Link
@@ -198,7 +199,7 @@ export function Navbar() {
         }`}
       >
         <div className="flex flex-col p-4 space-y-1 overflow-y-auto h-full">
-          {navItems.map((item) => {
+          {navItems.filter(item => !hiddenSections.includes(item.scrollTo)).map((item) => {
             const isActive = pathname === item.href
             return (
               <Link

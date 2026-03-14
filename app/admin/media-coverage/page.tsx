@@ -9,7 +9,7 @@ export default async function MediaCoveragePage() {
   const { data: mediaCoverage } = await supabase
     .from("media_coverage")
     .select("*")
-    .order("display_order", { ascending: true })
+    .order("updated_at", { ascending: false })
 
   return (
     <div className="space-y-6">

@@ -37,7 +37,7 @@ export default async function AwardsPage() {
                         src={award.image}
                         alt={award.title}
                         fill
-                        className="object-contain p-4"
+                        className="object-cover"
                       />
                     ) : (
                       <div className="flex items-center justify-center h-full">
