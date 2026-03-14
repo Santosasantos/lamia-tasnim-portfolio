@@ -1,4 +1,4 @@
-// Remove "use client" directive - this is now a Server Component
+﻿// Remove "use client" directive - this is now a Server Component
 import { createClient } from "@/lib/supabase/server"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -207,7 +207,7 @@ export default async function Home() {
                 </div>
               </div>
 
-              <div className="order-1 lg:order-2 flex justify-center animate-slide-from-right">
+              <div className="order-1 lg:order-2 flex flex-col items-center gap-4 animate-slide-from-right">
                 <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-[22rem] xl:h-[22rem] group">
                   <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-primary/25 via-[#f42a41]/10 to-primary/20 blur-2xl group-hover:from-primary/35 group-hover:via-[#f42a41]/15 group-hover:to-primary/30 transition-all duration-700" aria-hidden />
                   <div className="absolute inset-0 rounded-full border-4 border-white shadow-[0_0_0_4px_rgba(3,100,69,0.15)] ring-8 ring-primary/5" aria-hidden />
@@ -229,9 +229,9 @@ export default async function Home() {
                       </div>
                     </div>
                   </div>
-                  {/* Stat: Publications */}
+{/* Stat: Publications — hidden on mobile */}
                   {(publications?.length ?? 0) > 0 && (
-                    <div className="absolute -top-4 -left-8 bg-white rounded-2xl shadow-xl border border-border/60 px-4 py-3 flex items-center gap-2.5">
+                    <div className="hidden sm:flex absolute -top-4 -left-8 bg-white rounded-2xl shadow-xl border border-border/60 px-4 py-3 items-center gap-2.5">
                       <div className="p-2 rounded-xl bg-primary/10 flex-shrink-0"><FileText className="h-4 w-4 text-primary" /></div>
                       <div>
                         <p className="text-xl font-bold text-primary leading-none">{publications!.length}+</p>
@@ -239,9 +239,9 @@ export default async function Home() {
                       </div>
                     </div>
                   )}
-                  {/* Stat: Awards */}
+{/* Stat: Awards  hidden on mobile */}
                   {(awards?.length ?? 0) > 0 && (
-                    <div className="absolute -bottom-4 -left-8 bg-white rounded-2xl shadow-xl border border-border/60 px-4 py-3 flex items-center gap-2.5">
+                    <div className="hidden sm:flex absolute -bottom-4 -left-8 bg-white rounded-2xl shadow-xl border border-border/60 px-4 py-3 items-center gap-2.5">
                       <div className="p-2 rounded-xl bg-yellow-50 flex-shrink-0"><Award className="h-4 w-4 text-yellow-600" /></div>
                       <div>
                         <p className="text-xl font-bold text-yellow-600 leading-none">{awards!.length}+</p>
@@ -250,11 +250,34 @@ export default async function Home() {
                     </div>
                   )}
                 </div>
+                {/* Mobile-only inline stats pills */}
+                {((publications?.length ?? 0) > 0 || (awards?.length ?? 0) > 0) && (
+                  <div className="flex sm:hidden items-center gap-3 mt-4">
+                    {(publications?.length ?? 0) > 0 && (
+                      <div className="flex items-center gap-2 bg-white rounded-xl shadow-md border border-border/60 px-3 py-2">
+                        <div className="p-1.5 rounded-lg bg-primary/10"><FileText className="h-3.5 w-3.5 text-primary" /></div>
+                        <div>
+                          <p className="text-base font-bold text-primary leading-none">{publications!.length}+</p>
+                          <p className="text-[10px] text-muted-foreground font-medium">Publications</p>
+                        </div>
+                      </div>
+                    )}
+                    {(awards?.length ?? 0) > 0 && (
+                      <div className="flex items-center gap-2 bg-white rounded-xl shadow-md border border-border/60 px-3 py-2">
+                        <div className="p-1.5 rounded-lg bg-yellow-50"><Award className="h-3.5 w-3.5 text-yellow-600" /></div>
+                        <div>
+                          <p className="text-base font-bold text-yellow-600 leading-none">{awards!.length}+</p>
+                          <p className="text-[10px] text-muted-foreground font-medium">Awards</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <div className="hidden sm:block absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
             <ScrollButton targetId="education">
               <button className="flex flex-col items-center gap-2 text-primary hover:text-primary-dark transition-colors group">
                 <span className="text-sm font-semibold tracking-wide">Explore More</span>
