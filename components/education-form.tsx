@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { RichTextarea } from "@/components/ui/rich-textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
@@ -51,8 +52,9 @@ export function EducationForm({ education }: EducationFormProps) {
       end_date: formData.get("end_date") as string,
       cgpa: formData.get("cgpa") as string,
       location: formData.get("location") as string,
-      achievements: formData.get("achievements") as string,
       status: formData.get("status") as string,
+      highlights: formData.get("highlights") as string,
+      coursework: formData.get("coursework") as string,
     }
 
     try {
@@ -196,16 +198,27 @@ export function EducationForm({ education }: EducationFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="achievements">Highlights (one bullet per line)</Label>
-            <Textarea
-              id="achievements"
-              name="achievements"
-              defaultValue={education?.achievements}
-              rows={6}
-              placeholder={`One bullet point per line. Use **text** to make words bold.\n\nExample:\nAwarded one of the **highest scholarship recognitions** in her MPH journey\nCompleted international internship at **Mahidol University, Thailand** (ranked **358 globally** in QS World Rankings 2026)\nCompleted coursework in: **Mental Health**, **Biostatistics**, **Data Management & Analysis**`}
+            <Label htmlFor="highlights">Highlights (one bullet per line)</Label>
+            <RichTextarea
+              id="highlights"
+              name="highlights"
+              defaultValue={education?.highlights}
+              rows={5}
+              placeholder={`One bullet per line. Select text + Ctrl+B to bold.\n\nExample:\nAwarded one of the **highest scholarship recognitions** in her MPH journey\nCompleted international internship at **Mahidol University, Thailand**`}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="coursework">Completed Coursework</Label>
+            <RichTextarea
+              id="coursework"
+              name="coursework"
+              defaultValue={education?.coursework}
+              rows={3}
+              placeholder={`Comma-separated courses. Select text + Ctrl+B to bold.\n\nExample:\n**Mental Health**, **Biostatistics**, **Data Management & Analysis**`}
             />
             <p className="text-xs text-muted-foreground">
-              Each line becomes a bullet point. Wrap words in <code className="bg-muted px-1 rounded">**double asterisks**</code> to display them in bold.
+              Displayed under a "Completed Coursework in:" label.
             </p>
           </div>
 

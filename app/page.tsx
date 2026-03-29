@@ -1,4 +1,4 @@
-// Remove "use client" directive - this is now a Server Component
+﻿// Remove "use client" directive - this is now a Server Component
 import { createClient } from "@/lib/supabase/server"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -284,7 +284,12 @@ export default async function Home() {
                 >
                   <CardContent className="p-6">
                     <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-4">
-                      <h3 className="text-2xl font-bold text-primary">{edu.degree}</h3>
+                      <div>
+                        <h3 className="text-2xl font-bold text-primary">{edu.degree}</h3>
+                        {edu.field_of_study && (
+                          <p className="text-base text-muted-foreground mt-1">{edu.field_of_study}</p>
+                        )}
+                      </div>
                       <span className="text-sm font-semibold bg-primary text-white px-4 py-1.5 rounded-full whitespace-nowrap self-start">
                         {edu.status}
                       </span>
@@ -302,10 +307,12 @@ export default async function Home() {
                         </span>
                         {edu.cgpa && <span className="font-bold text-primary text-lg">{edu.cgpa}</span>}
                       </div>
-                      {edu.achievements && (
+
+                      {/* Highlights — bullet points with **bold** support */}
+                      {edu.highlights && (
                         <div className="mt-5 pt-5 border-t border-border">
                           <ul className="space-y-2.5">
-                            {edu.achievements.split("\n").filter((line: string) => line.trim()).map((line: string, idx: number) => (
+                            {edu.highlights.split("\n").filter((line: string) => line.trim()).map((line: string, idx: number) => (
                               <li key={idx} className="flex gap-3 text-base">
                                 <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#0d9488] flex-shrink-0 inline-block" />
                                 <span className="text-muted-foreground leading-relaxed">
@@ -318,6 +325,20 @@ export default async function Home() {
                               </li>
                             ))}
                           </ul>
+                        </div>
+                      )}
+
+                      {/* Coursework */}
+                      {edu.coursework && (
+                        <div className={edu.highlights ? "mt-4" : "mt-5 pt-5 border-t border-border"}>
+                          <p className="text-sm font-bold text-foreground mb-2">Completed Coursework in:</p>
+                          <p className="text-base text-muted-foreground leading-relaxed">
+                            {edu.coursework.split(/\*\*(.+?)\*\*/g).map((part: string, i: number) =>
+                              i % 2 === 1
+                                ? <strong key={i} className="font-semibold text-foreground">{part}</strong>
+                                : part
+                            )}
+                          </p>
                         </div>
                       )}
                     </div>
@@ -398,10 +419,16 @@ export default async function Home() {
 
                       {exp.responsibilities && exp.responsibilities.length > 0 && (
                         <ul className="space-y-3">
-                          {exp.responsibilities.map((responsibility: any, index: number) => (
+                          {exp.responsibilities.map((responsibility: string, index: number) => (
                             <li key={index} className="flex gap-3 text-base">
-                              <span className="text-primary font-bold text-lg"></span>
-                              <span className="text-muted-foreground leading-relaxed">{responsibility}</span>
+                              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 inline-block" />
+                              <span className="text-muted-foreground leading-relaxed">
+                                {responsibility.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+                                  i % 2 === 1
+                                    ? <strong key={i} className="font-semibold text-foreground">{part}</strong>
+                                    : part
+                                )}
+                              </span>
                             </li>
                           ))}
                         </ul>
@@ -481,10 +508,16 @@ export default async function Home() {
 
                       {exp.responsibilities && exp.responsibilities.length > 0 && (
                         <ul className="space-y-3">
-                          {exp.responsibilities.map((responsibility: any, index: number) => (
+                          {exp.responsibilities.map((responsibility: string, index: number) => (
                             <li key={index} className="flex gap-3 text-base">
-                              <span className="text-primary font-bold text-lg">€¢</span>
-                              <span className="text-muted-foreground leading-relaxed">{responsibility}</span>
+                              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 inline-block" />
+                              <span className="text-muted-foreground leading-relaxed">
+                                {responsibility.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+                                  i % 2 === 1
+                                    ? <strong key={i} className="font-semibold text-foreground">{part}</strong>
+                                    : part
+                                )}
+                              </span>
                             </li>
                           ))}
                         </ul>

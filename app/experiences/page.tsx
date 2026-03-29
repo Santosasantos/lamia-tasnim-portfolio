@@ -59,10 +59,16 @@ export default async function ExperiencesPage() {
 
         {exp.responsibilities && exp.responsibilities.length > 0 && (
           <ul className="space-y-2">
-            {exp.responsibilities.map((responsibility: any, index: number) => (
+            {exp.responsibilities.map((responsibility: string, index: number) => (
               <li key={index} className="flex gap-2.5 text-sm">
                 <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 inline-block"></span>
-                <span className="text-muted-foreground leading-relaxed">{responsibility}</span>
+                <span className="text-muted-foreground leading-relaxed">
+                  {responsibility.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+                    i % 2 === 1
+                      ? <strong key={i} className="font-semibold text-foreground">{part}</strong>
+                      : part
+                  )}
+                </span>
               </li>
             ))}
           </ul>

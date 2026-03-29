@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { RichTextarea } from "@/components/ui/rich-textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
@@ -204,13 +205,13 @@ export function ExperienceForm({ experience }: ExperienceFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="responsibilities">Responsibilities (one per line)</Label>
-            <Textarea
+            <Label htmlFor="responsibilities">Highlights (one per line)</Label>
+            <RichTextarea
               id="responsibilities"
               name="responsibilities"
               defaultValue={experience?.responsibilities?.join("\n")}
               rows={6}
-              placeholder="• Analyzed panel datasets...&#10;• Estimated difference-in-differences models...&#10;• Designed stakeholder surveys..."
+              placeholder={`One highlight per line. Select text + Ctrl+B to bold.\n\nExample:\nAnalyzed panel datasets using **SPSS** and **Stata**\nRepresented Bangladesh at the **WHO South-East Asia Regional Conference**`}
             />
           </div>
 
