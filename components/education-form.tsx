@@ -196,14 +196,17 @@ export function EducationForm({ education }: EducationFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="achievements">Achievements (one per line)</Label>
+            <Label htmlFor="achievements">Highlights (one bullet per line)</Label>
             <Textarea
               id="achievements"
               name="achievements"
               defaultValue={education?.achievements}
-              rows={4}
-              placeholder="List your achievements"
+              rows={6}
+              placeholder={`One bullet point per line. Use **text** to make words bold.\n\nExample:\nAwarded one of the **highest scholarship recognitions** in her MPH journey\nCompleted international internship at **Mahidol University, Thailand** (ranked **358 globally** in QS World Rankings 2026)\nCompleted coursework in: **Mental Health**, **Biostatistics**, **Data Management & Analysis**`}
             />
+            <p className="text-xs text-muted-foreground">
+              Each line becomes a bullet point. Wrap words in <code className="bg-muted px-1 rounded">**double asterisks**</code> to display them in bold.
+            </p>
           </div>
 
           <div className="flex gap-3">

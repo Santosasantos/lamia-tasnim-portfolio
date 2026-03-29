@@ -1,4 +1,4 @@
-﻿// Remove "use client" directive - this is now a Server Component
+// Remove "use client" directive - this is now a Server Component
 import { createClient } from "@/lib/supabase/server"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -151,7 +151,7 @@ export default async function Home() {
 
           <div className="relative mx-auto max-w-6xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-14 items-center">
-              <div className="order-2 lg:order-1 space-y-4 sm:space-y-5 text-center lg:text-left animate-slide-from-left">
+              <div className="order-2 lg:order-1 space-y-3 sm:space-y-4 md:space-y-5 text-center lg:text-left animate-slide-from-left">
                 {/* Premium Badge: Key Representative */}
                 <div className="inline-flex items-center gap-2.5 rounded-full border-2 border-primary/50 bg-white/90 px-5 py-2.5 text-sm font-bold text-primary shadow-lg backdrop-blur-md hover:shadow-xl transition-all duration-300">
                   <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#f42a41] animate-pulse shadow-sm" aria-hidden />
@@ -162,7 +162,7 @@ export default async function Home() {
                   <p className="text-xs sm:text-sm uppercase tracking-[0.25em] text-primary/80 font-bold">
                     {profile?.hero_subtitle || "Representing Bangladesh in Global Mental Health & Public Health"}
                   </p>
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary leading-[0.95] tracking-tight">
+                  <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary leading-[0.95] tracking-tight">
                     {profile?.full_name || "Lamia Tasnim"}
                   </h1>
                   <div className="w-20 h-1.5 bg-gradient-to-r from-primary via-[#f42a41] to-primary rounded-full mx-auto lg:mx-0" aria-hidden />
@@ -171,18 +171,17 @@ export default async function Home() {
                   </p>
                 </div>
 
-                {/* Credentials Highlight - More Prominent */}
-                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start pt-2">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center lg:justify-start pt-1">
                   {profile?.credential_1_text && (
-                    <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 hover:border-primary/40 transition-all">
-                      <Award className="h-5 w-5 text-primary flex-shrink-0" />
-                      <span className="font-semibold text-foreground text-sm">{profile.credential_1_text}</span>
+                    <div className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 hover:border-primary/40 transition-all">
+                      <Award className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                      <span className="font-semibold text-foreground text-xs sm:text-sm">{profile.credential_1_text}</span>
                     </div>
                   )}
                   {profile?.credential_2_text && (
-                    <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 hover:border-primary/40 transition-all">
-                      <School className="h-5 w-5 text-primary flex-shrink-0" />
-                      <span className="font-semibold text-foreground text-sm">{profile.credential_2_text}</span>
+                    <div className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 hover:border-primary/40 transition-all">
+                      <School className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                      <span className="font-semibold text-foreground text-xs sm:text-sm">{profile.credential_2_text}</span>
                     </div>
                   )}
                 </div>
@@ -208,7 +207,7 @@ export default async function Home() {
               </div>
 
               <div className="order-1 lg:order-2 flex flex-col items-center gap-4 animate-slide-from-right">
-                <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-[22rem] xl:h-[22rem] group">
+                <div className="relative w-44 h-44 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 xl:w-[22rem] xl:h-[22rem] group">
                   <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-primary/25 via-[#f42a41]/10 to-primary/20 blur-2xl group-hover:from-primary/35 group-hover:via-[#f42a41]/15 group-hover:to-primary/30 transition-all duration-700" aria-hidden />
                   <div className="absolute inset-0 rounded-full border-4 border-white shadow-[0_0_0_4px_rgba(3,100,69,0.15)] ring-8 ring-primary/5" aria-hidden />
                   <div className="absolute -inset-2 rounded-full border-2 border-primary/20 animate-pulse" aria-hidden />
@@ -229,26 +228,7 @@ export default async function Home() {
                       </div>
                     </div>
                   </div>
-{/* Stat: Publications — hidden on mobile */}
-                  {(publications?.length ?? 0) > 0 && (
-                    <div className="hidden sm:flex absolute -top-4 -left-8 bg-white rounded-2xl shadow-xl border border-border/60 px-4 py-3 items-center gap-2.5">
-                      <div className="p-2 rounded-xl bg-primary/10 flex-shrink-0"><FileText className="h-4 w-4 text-primary" /></div>
-                      <div>
-                        <p className="text-xl font-bold text-primary leading-none">{publications!.length}+</p>
-                        <p className="text-xs text-muted-foreground font-medium mt-0.5">Publications</p>
-                      </div>
-                    </div>
-                  )}
-{/* Stat: Awards  hidden on mobile */}
-                  {(awards?.length ?? 0) > 0 && (
-                    <div className="hidden sm:flex absolute -bottom-4 -left-8 bg-white rounded-2xl shadow-xl border border-border/60 px-4 py-3 items-center gap-2.5">
-                      <div className="p-2 rounded-xl bg-yellow-50 flex-shrink-0"><Award className="h-4 w-4 text-yellow-600" /></div>
-                      <div>
-                        <p className="text-xl font-bold text-yellow-600 leading-none">{awards!.length}+</p>
-                        <p className="text-xs text-muted-foreground font-medium mt-0.5">Awards</p>
-                      </div>
-                    </div>
-                  )}
+
                 </div>
                 {/* Mobile-only inline stats pills */}
                 {((publications?.length ?? 0) > 0 || (awards?.length ?? 0) > 0) && (
@@ -323,9 +303,21 @@ export default async function Home() {
                         {edu.cgpa && <span className="font-bold text-primary text-lg">{edu.cgpa}</span>}
                       </div>
                       {edu.achievements && (
-                        <div className="mt-6 pt-6 border-t border-border">
-                          <p className="text-sm font-bold text-foreground mb-2">Core Courses:</p>
-                          <p className="text-base text-muted-foreground leading-relaxed">{edu.achievements}</p>
+                        <div className="mt-5 pt-5 border-t border-border">
+                          <ul className="space-y-2.5">
+                            {edu.achievements.split("\n").filter((line: string) => line.trim()).map((line: string, idx: number) => (
+                              <li key={idx} className="flex gap-3 text-base">
+                                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#0d9488] flex-shrink-0 inline-block" />
+                                <span className="text-muted-foreground leading-relaxed">
+                                  {line.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+                                    i % 2 === 1
+                                      ? <strong key={i} className="font-semibold text-foreground">{part}</strong>
+                                      : part
+                                  )}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       )}
                     </div>
@@ -408,7 +400,7 @@ export default async function Home() {
                         <ul className="space-y-3">
                           {exp.responsibilities.map((responsibility: any, index: number) => (
                             <li key={index} className="flex gap-3 text-base">
-                              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 inline-block"></span>
+                              <span className="text-primary font-bold text-lg"></span>
                               <span className="text-muted-foreground leading-relaxed">{responsibility}</span>
                             </li>
                           ))}
@@ -491,7 +483,7 @@ export default async function Home() {
                         <ul className="space-y-3">
                           {exp.responsibilities.map((responsibility: any, index: number) => (
                             <li key={index} className="flex gap-3 text-base">
-                              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 inline-block"></span>
+                              <span className="text-primary font-bold text-lg">€¢</span>
                               <span className="text-muted-foreground leading-relaxed">{responsibility}</span>
                             </li>
                           ))}
